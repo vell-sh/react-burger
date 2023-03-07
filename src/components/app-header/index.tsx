@@ -9,13 +9,14 @@ import MenuItem from './menu-item';
 
 import styles from './style.module.css';
 import HeaderItem from './header-item';
+import cn from 'classnames';
 
 const AppHeader = () => {
   const [isActive, setIsActive] = React.useState(false);
 
   return (
-    <header className="AppHeader pt-4 pb-4">
-      <nav>
+    <header className={cn('pt-4 pb-4', styles.main)}>
+      <nav className="container">
         <ul className={styles.wrapper}>
           <HeaderItem>
             <MenuItem text="Конструктор" Icon={BurgerIcon} isActive={true} />

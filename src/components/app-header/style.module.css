@@ -1,3 +1,7 @@
+.main {
+  background-color: #1C1C21;
+}
+
 .wrapper {
   position: relative;
   display: flex;

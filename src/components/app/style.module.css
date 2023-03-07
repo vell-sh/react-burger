@@ -1,11 +1,11 @@
-.container {
-    min-width: 1280px;
-    margin-left: auto;
-    margin-right: auto;
-  }
+.main {
+  display: flex;
+}
 
-@media (min-width: 1320px) {
-  .container {
-    width: 1280px;
-  }
+.title {
+  margin: 0;
+}
+
+.grid {
+  max-width: 600px;
 }
