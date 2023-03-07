@@ -2,15 +2,14 @@ import { TIconProps } from '@ya.praktikum/react-developer-burger-ui-components/d
 import cn from 'classnames';
 import styles from './style.module.css';
 
-type P = {
-  className?: string;
+type IProps = {
   url?: string;
   Icon: ({ type }: TIconProps) => JSX.Element;
   text: string;
   isActive: boolean;
 };
 
-const MenuItem = ({ url, Icon, text, isActive }: P) => {
+const MenuItem = ({ url, Icon, text, isActive }: IProps) => {
   return (
     <div className={cn(styles.item, isActive && styles.item_active, 'pt-4 pb-4 pl-5 pr-5')}>
       <a className={styles.link} href={url}>

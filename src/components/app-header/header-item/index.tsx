@@ -2,13 +2,13 @@ import cn from 'classnames';
 
 import styles from './style.module.css';
 
-type P = {
+type IProps = {
   className?: string;
   children: React.ReactNode;
 };
 
-const HeaderItem = (props: P) => {
-  return <li className={cn(props.className, styles.item)}>{props.children}</li>;
+const HeaderItem = ({ className, children }: IProps) => {
+  return <li className={cn(className, styles.item)}>{children}</li>;
 };
 
 export default HeaderItem;
