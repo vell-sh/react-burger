@@ -1,0 +1,29 @@
+import { Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import styles from './style.module.css';
+import cn from 'classnames';
+
+interface IProps {
+  price: number;
+}
+
+const OrderConfirmation = ({ price }: IProps) => {
+  return (
+    <div className={cn(styles.container, 'pt-6')}>
+      <div className={cn('text text_type_main-large', styles.price)}>
+        <span>{price}</span>
+        <CurrencyIcon type="primary" />
+      </div>
+      <Button extraClass={styles.button} htmlType="button" type="primary" size="medium">
+        Оформить заказ
+      </Button>
+    </div>
+  );
+};
+
+const defaultProps = {
+  price: 0,
+};
+
+OrderConfirmation.defaultProps = defaultProps;
+
+export default OrderConfirmation;

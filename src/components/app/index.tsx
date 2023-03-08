@@ -1,7 +1,7 @@
 import React from 'react';
 import config from '../../config/config';
 import AppHeader from '../app-header';
-import BurgerConstructor from '../burger-constructor/burger-constructor';
+import BurgerConstructor from '../burger-constructor';
 import BurgerIngredients from '../burger-ingredients';
 import styles from './style.module.css';
 import cn from 'classnames';
@@ -34,14 +34,17 @@ const App = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const bun = state.ingredients.find(x => x.type === 'bun');
+  const itemWithoutBuns = state.ingredients.filter(x => x.type !== 'bun').slice(7);
+
   return (
     <>
       <AppHeader />
-      <main className="pt-10 container">
+      <main className={cn('pt-10 pb-10 container', styles.main)}>
         <h1 className={styles.title}>Соберите бургер</h1>
-        <div className={styles.main}>
+        <div className={styles.content}>
           <BurgerIngredients className={cn('mr-10', styles.grid)} ingredients={state.ingredients} />
-          <BurgerConstructor className={styles.grid} />
+          <BurgerConstructor bun={bun} mainList={itemWithoutBuns} className={styles.grid} />
         </div>
       </main>
     </>
