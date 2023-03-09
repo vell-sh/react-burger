@@ -5,12 +5,13 @@ import { IIngredient } from '../../../types/ingredientTypes';
 
 type IProps = {
   item: IIngredient;
+  onClick(item: IIngredient): void;
 };
 
-const BurgerItem = ({ item }: IProps) => {
+const BurgerItem = ({ item, onClick }: IProps) => {
   const { name, image, price } = item;
   return (
-    <div className={cn(styles.wrapper)}>
+    <div className={cn(styles.wrapper)} onClick={() => onClick(item)}>
       <img src={image} alt={name} />
       <p className={styles.price}>
         <span className="mr-2">{price}</span>

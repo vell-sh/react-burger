@@ -14,6 +14,7 @@ type IProps = {
 
 const BurgerConstructor = ({ className, bun, mainList }: IProps) => {
   const [isVisible, setIsVisible] = React.useState(false);
+
   if (!bun) {
     return <></>;
   }
@@ -40,7 +41,7 @@ const BurgerConstructor = ({ className, bun, mainList }: IProps) => {
         </div>
         <div className={cn(styles.scrollBlock, 'custom-scroll pl-4 pr-4')}>
           {mainList.map(el => (
-            <div className={styles.availableConstructorItem}>
+            <div key={el._id} className={styles.availableConstructorItem}>
               <DragIcon type="primary" />
               <ConstructorElement
                 key={el._id}

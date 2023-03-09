@@ -5,6 +5,7 @@ import { IIngredient } from '../../types/ingredientTypes';
 import cn from 'classnames';
 import styles from './style.module.css';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
+import ModalIngredientDetails from '../modal-ingredient-detail';
 
 interface IProps {
   className?: string;
@@ -13,9 +14,22 @@ interface IProps {
 
 const BurgerIngredients = ({ className, ingredients }: IProps) => {
   const [current, setCurrent] = React.useState('bun');
+  const [currentIngredient, setCurrentIngredient] = React.useState<IIngredient | null>(null);
+  const [isVisible, setIsVisible] = React.useState(false);
+
   const bunItems = ingredients.filter(x => x.type === 'bun');
   const sauceItems = ingredients.filter(x => x.type === 'sauce');
   const mainItems = ingredients.filter(x => x.type === 'main');
+
+  const handleOpenModal = (ingredient: IIngredient) => {
+    setCurrentIngredient(ingredient);
+    setIsVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsVisible(false);
+  };
+
   return (
     <section className={className}>
       <div className={cn('custom-scroll', styles.container)}>
@@ -33,21 +47,28 @@ const BurgerIngredients = ({ className, ingredients }: IProps) => {
         <div>
           <BurgerIngredientsWrapper title="Булки">
             {bunItems.map(x => (
-              <BurgerItem key={x._id} item={x} />
+              <BurgerItem onClick={handleOpenModal} key={x._id} item={x} />
             ))}
           </BurgerIngredientsWrapper>
           <BurgerIngredientsWrapper title="Соусы">
             {sauceItems.map(x => (
-              <BurgerItem key={x._id} item={x} />
+              <BurgerItem onClick={handleOpenModal} key={x._id} item={x} />
             ))}
           </BurgerIngredientsWrapper>
           <BurgerIngredientsWrapper title="Начинки">
             {mainItems.map(x => (
-              <BurgerItem key={x._id} item={x} />
+              <BurgerItem onClick={handleOpenModal} key={x._id} item={x} />
             ))}
           </BurgerIngredientsWrapper>
         </div>
       </div>
+      {isVisible && (
+        <ModalIngredientDetails
+          onClose={handleCloseModal}
+          isVisible={isVisible}
+          ingredient={currentIngredient!}
+        />
+      )}
     </section>
   );
 };
