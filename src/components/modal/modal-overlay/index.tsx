@@ -4,8 +4,8 @@ interface IProps {
   onClose(): void;
 }
 
-const ModalBackDrop = ({ onClose }: IProps) => {
+const ModalOverlay = ({ onClose }: IProps) => {
   return <div onClick={onClose} className={styles.backdrop}></div>;
 };
 
-export default ModalBackDrop;
+export default ModalOverlay;

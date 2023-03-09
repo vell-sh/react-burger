@@ -1,5 +1,5 @@
 import ReactDOM from 'react-dom';
-import ModalBackDrop from './modal-backdrop';
+import ModalOverlay from './modal-overlay';
 import ModalHeader from './modal-header';
 import cn from 'classnames';
 import styles from './style.module.css';
@@ -28,7 +28,7 @@ const Modal = (props: IProps) => {
           {children}
         </div>
       </div>
-      <ModalBackDrop onClose={onClose} />
+      <ModalOverlay onClose={onClose} />
     </>,
     modalRoot!
   );
