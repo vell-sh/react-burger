@@ -1,12 +1,13 @@
+import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
+import cn from 'classnames';
 import React from 'react';
+import { getRandomRangeValue } from '../../lib/utils';
+import { IIngredient } from '../../types/ingredientTypes';
+import IngredientDetails from '../ingredient-detail';
 import BurgerIngredient from './burger-ingredient';
 import BurgerIngredientsWrapper from './burger-ingredients-wrapper';
-import { IIngredient } from '../../types/ingredientTypes';
-import cn from 'classnames';
+
 import styles from './style.module.css';
-import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
-import ModalIngredientDetails from '../modal-ingredient-detail';
-import { getRandomRangeValue } from '../../lib/utils';
 
 interface IProps {
   className?: string;
@@ -69,7 +70,7 @@ const BurgerIngredients = ({ className, ingredients }: IProps) => {
         </div>
       </div>
       {isVisible && (
-        <ModalIngredientDetails
+        <IngredientDetails
           onClose={handleCloseModal}
           isVisible={isVisible}
           ingredient={currentIngredient!}

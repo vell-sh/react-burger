@@ -1,8 +1,8 @@
+import cn from 'classnames';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ModalOverlay from './modal-overlay';
 import ModalHeader from './modal-header';
-import cn from 'classnames';
+import ModalOverlay from './modal-overlay';
 
 import styles from './style.module.css';
 
@@ -10,9 +10,9 @@ const modalRoot = document.getElementById('react-modals');
 
 interface IProps {
   children: React.ReactNode;
-  title?: string;
   isVisible: boolean;
   onClose(): void;
+  title?: string;
 }
 
 const Modal = (props: IProps) => {

@@ -1,6 +1,7 @@
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import styles from './style.module.css';
 import cn from 'classnames';
+
+import styles from './style.module.css';
 
 interface P {
   title?: string;

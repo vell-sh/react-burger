@@ -1,5 +1,6 @@
 import { TIconProps } from '@ya.praktikum/react-developer-burger-ui-components/dist/ui/icons/utils';
 import cn from 'classnames';
+
 import styles from './style.module.css';
 
 type IProps = {

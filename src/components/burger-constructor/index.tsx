@@ -1,15 +1,16 @@
-import { IIngredient } from '../../types/ingredientTypes';
-import cn from 'classnames';
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import styles from './style.module.css';
-import OrderConfirmation from './order-confirmation';
+import cn from 'classnames';
 import React from 'react';
-import ModalOrderDetails from '../modal-order-details';
+import { IIngredient } from '../../types/ingredientTypes';
+import OrderDetails from '../order-details';
+import OrderConfirmation from './order-confirmation';
+
+import styles from './style.module.css';
 
 type IProps = {
+  mainList: Array<IIngredient>;
   className?: string;
   bun?: IIngredient;
-  mainList: Array<IIngredient>;
 };
 
 const BurgerConstructor = ({ className, bun, mainList }: IProps) => {
@@ -62,7 +63,7 @@ const BurgerConstructor = ({ className, bun, mainList }: IProps) => {
           />
         </div>
         <OrderConfirmation onClick={handleOpenModal} price={1234} />
-        {isVisible && <ModalOrderDetails isVisible={isVisible} onClose={handleCloseModal} />}
+        {isVisible && <OrderDetails isVisible={isVisible} onClose={handleCloseModal} />}
       </div>
     </section>
   );

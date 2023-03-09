@@ -4,16 +4,13 @@ import {
   Logo,
   ProfileIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import React from 'react';
 import MenuItem from './menu-item';
+import cn from 'classnames';
+import HeaderItem from './header-item';
 
 import styles from './style.module.css';
-import HeaderItem from './header-item';
-import cn from 'classnames';
 
 const AppHeader = () => {
-  const [isActive, setIsActive] = React.useState(false);
-
   return (
     <header className={cn('pt-4 pb-4', styles.main)}>
       <nav className="container">
@@ -22,13 +19,13 @@ const AppHeader = () => {
             <MenuItem text="Конструктор" Icon={BurgerIcon} isActive={true} />
           </HeaderItem>
           <HeaderItem>
-            <MenuItem text="Лента заказов" Icon={ListIcon} isActive={isActive} />
+            <MenuItem text="Лента заказов" Icon={ListIcon} isActive={false} />
           </HeaderItem>
           <HeaderItem className={styles.logo}>
             <Logo />
           </HeaderItem>
           <HeaderItem className={styles.lastItem}>
-            <MenuItem text="Личный кабинет" Icon={ProfileIcon} isActive={isActive} />
+            <MenuItem text="Личный кабинет" Icon={ProfileIcon} isActive={false} />
           </HeaderItem>
         </ul>
       </nav>

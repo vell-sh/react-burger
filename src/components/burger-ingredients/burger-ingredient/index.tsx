@@ -1,7 +1,8 @@
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import styles from './style.module.css';
 import cn from 'classnames';
 import { IIngredient } from '../../../types/ingredientTypes';
+
+import styles from './style.module.css';
 
 type IProps = {
   item: IIngredient;

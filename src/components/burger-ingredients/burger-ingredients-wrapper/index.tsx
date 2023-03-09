@@ -1,5 +1,6 @@
-import styles from './style.module.css';
 import cn from 'classnames';
+
+import styles from './style.module.css';
 
 interface IProps {
   title: string;

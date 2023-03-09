@@ -1,11 +1,12 @@
+import cn from 'classnames';
 import React from 'react';
 import config from '../../config/config';
+import { IIngredient } from '../../types/ingredientTypes';
 import AppHeader from '../app-header';
 import BurgerConstructor from '../burger-constructor';
 import BurgerIngredients from '../burger-ingredients';
+
 import styles from './style.module.css';
-import cn from 'classnames';
-import { IIngredient } from '../../types/ingredientTypes';
 
 interface IIngredientsLoad {
   isLoading: boolean;

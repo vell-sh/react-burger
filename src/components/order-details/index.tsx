@@ -1,14 +1,15 @@
-import Modal from '../modal';
-import styles from './style.module.css';
-import done from '../../images/graphics.svg';
 import cn from 'classnames';
+import done from '../../images/graphics.svg';
+import Modal from '../modal';
+
+import styles from './style.module.css';
 
 interface IProps {
   isVisible: boolean;
   onClose(): void;
 }
 
-const ModalOrderDetails = ({ isVisible, onClose }: IProps) => {
+const OrderDetails = ({ isVisible, onClose }: IProps) => {
   return (
     <Modal isVisible={isVisible} onClose={onClose}>
       <div className={cn(styles.container, 'pb-20')}>
@@ -22,4 +23,4 @@ const ModalOrderDetails = ({ isVisible, onClose }: IProps) => {
   );
 };
 
-export default ModalOrderDetails;
+export default OrderDetails;
