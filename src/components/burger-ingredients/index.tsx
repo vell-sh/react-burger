@@ -1,11 +1,12 @@
 import React from 'react';
-import BurgerItem from './burger-item';
+import BurgerIngredient from './burger-ingredient';
 import BurgerIngredientsWrapper from './burger-ingredients-wrapper';
 import { IIngredient } from '../../types/ingredientTypes';
 import cn from 'classnames';
 import styles from './style.module.css';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import ModalIngredientDetails from '../modal-ingredient-detail';
+import { getRandomRangeValue } from '../../lib/utils';
 
 interface IProps {
   className?: string;
@@ -47,17 +48,22 @@ const BurgerIngredients = ({ className, ingredients }: IProps) => {
         <div>
           <BurgerIngredientsWrapper title="Булки">
             {bunItems.map(x => (
-              <BurgerItem onClick={handleOpenModal} key={x._id} item={x} />
+              <BurgerIngredient
+                key={x._id}
+                item={x}
+                count={getRandomRangeValue(0, 5)}
+                onClick={handleOpenModal}
+              />
             ))}
           </BurgerIngredientsWrapper>
           <BurgerIngredientsWrapper title="Соусы">
             {sauceItems.map(x => (
-              <BurgerItem onClick={handleOpenModal} key={x._id} item={x} />
+              <BurgerIngredient key={x._id} item={x} onClick={handleOpenModal} />
             ))}
           </BurgerIngredientsWrapper>
           <BurgerIngredientsWrapper title="Начинки">
             {mainItems.map(x => (
-              <BurgerItem onClick={handleOpenModal} key={x._id} item={x} />
+              <BurgerIngredient key={x._id} item={x} onClick={handleOpenModal} />
             ))}
           </BurgerIngredientsWrapper>
         </div>
