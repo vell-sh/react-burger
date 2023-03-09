@@ -1,7 +1,9 @@
+import React from 'react';
 import ReactDOM from 'react-dom';
 import ModalOverlay from './modal-overlay';
 import ModalHeader from './modal-header';
 import cn from 'classnames';
+
 import styles from './style.module.css';
 
 const modalRoot = document.getElementById('react-modals');
@@ -15,11 +17,26 @@ interface IProps {
 
 const Modal = (props: IProps) => {
   const { children, title, onClose, isVisible } = props;
+
   const modalClassName = cn(
     styles.modal,
     isVisible && styles.modalVisible,
     'pl-10 pt-10 pr-10 pb-10'
   );
+
+  const handleEscKey = () => {
+    onClose();
+  };
+
+  React.useEffect(() => {
+    document.addEventListener('keydown', handleEscKey, false);
+
+    return () => {
+      document.removeEventListener('keydown', handleEscKey, false);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return ReactDOM.createPortal(
     <>
       <div className={modalClassName}>
