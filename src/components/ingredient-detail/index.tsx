@@ -30,7 +30,7 @@ const IngredientDetails = ({ ingredient, isVisible, onClose }: IProps) => {
         <span className="text text_type_main-medium mb-8">{ingredient.name}</span>
         <div className={cn(styles.infoContainer, 'text-secondary')}>
           {getInformationList(ingredient).map(el => (
-            <InformationElement name={el.name} value={el.value} />
+            <InformationElement key={el.name} name={el.name} value={el.value} />
           ))}
         </div>
       </div>
