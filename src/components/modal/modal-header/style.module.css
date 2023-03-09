@@ -1,0 +1,10 @@
+.header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.close {
+  margin: 0;
+  cursor: pointer;
+}

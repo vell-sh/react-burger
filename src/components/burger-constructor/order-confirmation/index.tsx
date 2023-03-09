@@ -4,16 +4,22 @@ import cn from 'classnames';
 
 interface IProps {
   price: number;
+  onClick(): void;
 }
 
-const OrderConfirmation = ({ price }: IProps) => {
+const OrderConfirmation = ({ price, onClick }: IProps) => {
   return (
     <div className={cn(styles.container, 'pt-6')}>
       <div className={cn('text text_type_main-large', styles.price)}>
         <span>{price}</span>
         <CurrencyIcon type="primary" />
       </div>
-      <Button extraClass={styles.button} htmlType="button" type="primary" size="medium">
+      <Button
+        onClick={onClick}
+        extraClass={styles.button}
+        htmlType="button"
+        type="primary"
+        size="medium">
         Оформить заказ
       </Button>
     </div>

@@ -1,0 +1,30 @@
+.modal {
+  display: none;
+  height: 100%;
+  position: fixed;
+  width: 100%;
+  z-index: 11;
+}
+
+.modalVisible {
+  display: block;
+}
+
+.dialog {
+  background-color: #1C1C21;
+  border-radius: 32px;
+  left: 50%;
+  min-width: 720px;
+  padding: 40px;
+  position: fixed;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.content {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
