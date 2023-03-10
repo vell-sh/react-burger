@@ -63,7 +63,7 @@ const BurgerConstructor = ({ className, bun, mainList }: IProps) => {
           />
         </div>
         <OrderConfirmation onClick={handleOpenModal} price={1234} />
-        {isVisible && <OrderDetails isVisible={isVisible} onClose={handleCloseModal} />}
+        {isVisible && <OrderDetails onClose={handleCloseModal} />}
       </div>
     </section>
   );

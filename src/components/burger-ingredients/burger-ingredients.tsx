@@ -70,11 +70,7 @@ const BurgerIngredients = ({ className, ingredients }: IProps) => {
         </div>
       </div>
       {isVisible && (
-        <IngredientDetails
-          onClose={handleCloseModal}
-          isVisible={isVisible}
-          ingredient={currentIngredient!}
-        />
+        <IngredientDetails onClose={handleCloseModal} ingredient={currentIngredient!} />
       )}
     </section>
   );

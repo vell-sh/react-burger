@@ -5,13 +5,12 @@ import Modal from '../modal/modal';
 import styles from './style.module.css';
 
 interface IProps {
-  isVisible: boolean;
   onClose(): void;
 }
 
-const OrderDetails = ({ isVisible, onClose }: IProps) => {
+const OrderDetails = ({ onClose }: IProps) => {
   return (
-    <Modal isVisible={isVisible} onClose={onClose}>
+    <Modal onClose={onClose}>
       <div className={cn(styles.container, 'pb-20')}>
         <span className="text text_type_digits-large mb-8">034536</span>
         <span className="text text_type_main-medium mb-15">идентификатор заказа</span>

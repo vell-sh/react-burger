@@ -7,7 +7,6 @@ import styles from './style.module.css';
 
 interface IProps {
   ingredient: IIngredient;
-  isVisible: boolean;
   onClose(): void;
 }
 
@@ -20,9 +19,9 @@ const getInformationList = (ingredient: IIngredient) => {
   ];
 };
 
-const IngredientDetails = ({ ingredient, isVisible, onClose }: IProps) => {
+const IngredientDetails = ({ ingredient, onClose }: IProps) => {
   return (
-    <Modal title="Детали ингредиента" isVisible={isVisible} onClose={onClose}>
+    <Modal title="Детали ингредиента" onClose={onClose}>
       <div className={cn(styles.container, 'pb-5')}>
         <div className="mb-4">
           <img src={ingredient.image_large} alt={ingredient.name} />

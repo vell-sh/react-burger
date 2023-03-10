@@ -10,19 +10,14 @@ const modalRoot = document.getElementById('react-modals');
 
 interface IProps {
   children: React.ReactNode;
-  isVisible: boolean;
   onClose(): void;
   title?: string;
 }
 
 const Modal = (props: IProps) => {
-  const { children, title, onClose, isVisible } = props;
+  const { children, title, onClose } = props;
 
-  const modalClassName = cn(
-    styles.modal,
-    isVisible && styles.modalVisible,
-    'pl-10 pt-10 pr-10 pb-10'
-  );
+  const modalClassName = cn(styles.modal, 'pl-10 pt-10 pr-10 pb-10');
 
   const handleEscKey = () => {
     onClose();
@@ -50,10 +45,5 @@ const Modal = (props: IProps) => {
     modalRoot!
   );
 };
-
-const defaultProps = {
-  visible: false,
-};
-Modal.defaultProps = defaultProps;
 
 export default Modal;
