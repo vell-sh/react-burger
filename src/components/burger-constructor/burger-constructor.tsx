@@ -2,8 +2,8 @@ import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burg
 import cn from 'classnames';
 import React from 'react';
 import { IIngredient } from '../../types/ingredientTypes';
-import OrderDetails from '../order-details';
-import OrderConfirmation from './order-confirmation';
+import OrderDetails from '../order-details/order-details';
+import OrderConfirmation from './order-confirmation/order-confirmation';
 
 import styles from './style.module.css';
 

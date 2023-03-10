@@ -1,7 +1,7 @@
 import cn from 'classnames';
 import { IIngredient } from '../../types/ingredientTypes';
-import Modal from '../modal';
-import InformationElement from './information-element';
+import Modal from '../modal/modal';
+import InformationElement from './information-element/information-element';
 
 import styles from './style.module.css';
 

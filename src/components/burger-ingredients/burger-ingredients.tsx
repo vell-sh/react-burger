@@ -3,9 +3,9 @@ import cn from 'classnames';
 import React from 'react';
 import { getRandomRangeValue } from '../../lib/utils';
 import { IIngredient } from '../../types/ingredientTypes';
-import IngredientDetails from '../ingredient-detail';
-import BurgerIngredient from './burger-ingredient';
-import BurgerIngredientsWrapper from './burger-ingredients-wrapper';
+import IngredientDetails from '../ingredient-detail/ingredient-detail';
+import BurgerIngredient from './burger-ingredient/burger-ingredient';
+import BurgerIngredientsWrapper from './burger-ingredients-wrapper/burger-ingredients-wrapper';
 
 import styles from './style.module.css';
 

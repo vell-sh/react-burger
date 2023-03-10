@@ -1,8 +1,8 @@
 import cn from 'classnames';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ModalHeader from './modal-header';
-import ModalOverlay from './modal-overlay';
+import ModalHeader from './modal-header/modal-header';
+import ModalOverlay from './modal-overlay/modal-overlay';
 
 import styles from './style.module.css';
 

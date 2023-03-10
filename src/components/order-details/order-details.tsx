@@ -1,6 +1,6 @@
 import cn from 'classnames';
 import done from '../../images/graphics.svg';
-import Modal from '../modal';
+import Modal from '../modal/modal';
 
 import styles from './style.module.css';
 

@@ -4,9 +4,9 @@ import {
   Logo,
   ProfileIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import MenuItem from './menu-item';
+import MenuItem from './menu-item/menu-item';
 import cn from 'classnames';
-import HeaderItem from './header-item';
+import HeaderItem from './header-item/header-item';
 
 import styles from './style.module.css';
 
