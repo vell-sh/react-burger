@@ -1,13 +1,11 @@
 import cn from 'classnames';
 import { IIngredient } from '../../types/ingredientTypes';
-import Modal from '../modal/modal';
 import InformationElement from './information-element/information-element';
 
 import styles from './style.module.css';
 
 interface IProps {
   ingredient: IIngredient;
-  onClose(): void;
 }
 
 const getInformationList = (ingredient: IIngredient) => {
@@ -19,21 +17,19 @@ const getInformationList = (ingredient: IIngredient) => {
   ];
 };
 
-const IngredientDetails = ({ ingredient, onClose }: IProps) => {
+const IngredientDetails = ({ ingredient }: IProps) => {
   return (
-    <Modal title="Детали ингредиента" onClose={onClose}>
-      <div className={cn(styles.container, 'pb-5')}>
-        <div className="mb-4">
-          <img src={ingredient.image_large} alt={ingredient.name} />
-        </div>
-        <span className="text text_type_main-medium mb-8">{ingredient.name}</span>
-        <div className={cn(styles.infoContainer, 'text-secondary')}>
-          {getInformationList(ingredient).map(el => (
-            <InformationElement key={el.name} name={el.name} value={el.value} />
-          ))}
-        </div>
+    <div className={cn(styles.container, 'pb-5')}>
+      <div className="mb-4">
+        <img src={ingredient.image_large} alt={ingredient.name} />
       </div>
-    </Modal>
+      <span className="text text_type_main-medium mb-8">{ingredient.name}</span>
+      <div className={cn(styles.infoContainer, 'text-secondary')}>
+        {getInformationList(ingredient).map(el => (
+          <InformationElement key={el.name} name={el.name} value={el.value} />
+        ))}
+      </div>
+    </div>
   );
 };
 

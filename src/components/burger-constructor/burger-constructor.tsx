@@ -2,6 +2,7 @@ import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burg
 import cn from 'classnames';
 import React from 'react';
 import { IIngredient } from '../../types/ingredientTypes';
+import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import OrderConfirmation from './order-confirmation/order-confirmation';
 
@@ -63,7 +64,11 @@ const BurgerConstructor = ({ className, bun, mainList }: IProps) => {
           />
         </div>
         <OrderConfirmation onClick={handleOpenModal} price={1234} />
-        {isVisible && <OrderDetails onClose={handleCloseModal} />}
+        {isVisible && (
+          <Modal onClose={handleCloseModal}>
+            <OrderDetails />
+          </Modal>
+        )}
       </div>
     </section>
   );

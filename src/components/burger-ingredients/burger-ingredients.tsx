@@ -4,6 +4,7 @@ import React from 'react';
 import { getRandomRangeValue } from '../../lib/utils';
 import { IIngredient } from '../../types/ingredientTypes';
 import IngredientDetails from '../ingredient-detail/ingredient-detail';
+import Modal from '../modal/modal';
 import BurgerIngredient from './burger-ingredient/burger-ingredient';
 import BurgerIngredientsWrapper from './burger-ingredients-wrapper/burger-ingredients-wrapper';
 
@@ -70,7 +71,9 @@ const BurgerIngredients = ({ className, ingredients }: IProps) => {
         </div>
       </div>
       {isVisible && (
-        <IngredientDetails onClose={handleCloseModal} ingredient={currentIngredient!} />
+        <Modal title="Детали ингредиента" onClose={handleCloseModal}>
+          <IngredientDetails ingredient={currentIngredient!} />
+        </Modal>
       )}
     </section>
   );
