@@ -35,7 +35,7 @@ const BurgerIngredients = ({ className, ingredients }: IProps) => {
   return (
     <section className={className}>
       <div className={cn('custom-scroll', styles.container)}>
-        <nav style={{ display: 'flex' }}>
+        <div className={styles.menu}>
           <Tab value="bun" active={current === 'bun'} onClick={setCurrent}>
             Булки
           </Tab>
@@ -45,7 +45,7 @@ const BurgerIngredients = ({ className, ingredients }: IProps) => {
           <Tab value="main" active={current === 'main'} onClick={setCurrent}>
             Начинки
           </Tab>
-        </nav>
+        </div>
         <div>
           <BurgerIngredientsWrapper title="Булки">
             {bunItems.map(x => (
