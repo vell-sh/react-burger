@@ -25,12 +25,18 @@ const App = () => {
     const getIngredients = () => {
       setState({ ...state, hasError: false, isLoading: true });
       fetch(`${config.ingredientsUrl}`)
-        .then(res => res.json())
+        .then(res => {
+          if (res.ok) {
+            return res.json();
+          }
+          return Promise.reject(`Ошибка ${res.status}`);
+        })
         .then(result => setState({ ...state, ingredients: result.data, isLoading: false }))
         .catch(() => {
           setState({ ...state, hasError: true, isLoading: false });
         });
     };
+    
     getIngredients();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
