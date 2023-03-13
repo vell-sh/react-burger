@@ -1,0 +1,21 @@
+.main {
+  background-color: #1C1C21;
+}
+
+.wrapper {
+  position: relative;
+  display: flex;
+  margin: 0;
+  padding: 0;
+  justify-content: space-between;
+}
+
+.logo {
+  position: absolute;
+  top: 5px;
+  left: calc(50% - 145px);
+}
+
+.lastItem {
+  margin-left: auto;
+}

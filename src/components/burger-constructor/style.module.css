@@ -1,0 +1,22 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 16px;
+  height: 100%;
+  max-height: inherit;
+}
+
+.scrollBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: inherit;
+  overflow: overlay;
+}
+
+.availableConstructorItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
