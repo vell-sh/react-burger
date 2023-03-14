@@ -2,7 +2,8 @@ import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import cn from 'classnames';
 import React from 'react';
 import { getRandomRangeValue } from '../../lib/utils';
-import { IIngredient } from '../../types/ingredientTypes';
+import { formatIngridientType } from '../../services/format.service';
+import { IIngredient, IngridientType } from '../../types/ingredientTypes';
 import IngredientDetails from '../ingredient-detail/ingredient-detail';
 import Modal from '../modal/modal';
 import BurgerIngredient from './burger-ingredient/burger-ingredient';
@@ -36,19 +37,28 @@ const BurgerIngredients = ({ className, ingredients }: IProps) => {
   return (
     <section className={className}>
       <div className={styles.menu}>
-        <Tab value="bun" active={current === 'bun'} onClick={setCurrent}>
-          Булки
+        <Tab
+          value={IngridientType.bun}
+          active={current === IngridientType.bun}
+          onClick={setCurrent}>
+          {formatIngridientType(IngridientType.bun)}
         </Tab>
-        <Tab value="sauce" active={current === 'sauce'} onClick={setCurrent}>
-          Соусы
+        <Tab
+          value={IngridientType.sauce}
+          active={current === IngridientType.sauce}
+          onClick={setCurrent}>
+          {formatIngridientType(IngridientType.sauce)}
         </Tab>
-        <Tab value="main" active={current === 'main'} onClick={setCurrent}>
-          Начинки
+        <Tab
+          value={IngridientType.main}
+          active={current === IngridientType.main}
+          onClick={setCurrent}>
+          {formatIngridientType(IngridientType.main)}
         </Tab>
       </div>
       <div className={cn('custom-scroll', styles.container)}>
         <div>
-          <BurgerIngredientsWrapper title="Булки">
+          <BurgerIngredientsWrapper title={formatIngridientType(IngridientType.bun)}>
             {bunItems.map(x => (
               <BurgerIngredient
                 key={x._id}
@@ -58,12 +68,12 @@ const BurgerIngredients = ({ className, ingredients }: IProps) => {
               />
             ))}
           </BurgerIngredientsWrapper>
-          <BurgerIngredientsWrapper title="Соусы">
+          <BurgerIngredientsWrapper title={formatIngridientType(IngridientType.sauce)}>
             {sauceItems.map(x => (
               <BurgerIngredient key={x._id} item={x} onClick={handleOpenModal} />
             ))}
           </BurgerIngredientsWrapper>
-          <BurgerIngredientsWrapper title="Начинки">
+          <BurgerIngredientsWrapper title={formatIngridientType(IngridientType.main)}>
             {mainItems.map(x => (
               <BurgerIngredient key={x._id} item={x} onClick={handleOpenModal} />
             ))}
