@@ -9,17 +9,13 @@ import OrderConfirmation from './order-confirmation/order-confirmation';
 import styles from './style.module.css';
 
 type IProps = {
-  mainList: Array<IIngredient>;
+  ingredientList: Array<IIngredient>;
   className?: string;
   bun?: IIngredient;
 };
 
-const BurgerConstructor = ({ className, bun, mainList }: IProps) => {
+const BurgerConstructor = ({ className, bun, ingredientList: mainList }: IProps) => {
   const [isVisible, setIsVisible] = React.useState(false);
-
-  if (!bun) {
-    return <></>;
-  }
 
   const handleOpenModal = () => {
     setIsVisible(true);
@@ -27,6 +23,24 @@ const BurgerConstructor = ({ className, bun, mainList }: IProps) => {
 
   const handleCloseModal = () => {
     setIsVisible(false);
+  };
+
+  const EmptyConstructor = () => {
+    return (
+      <p className=" text text_type_main-default">Корзина пуста, добавьте булку для бургера</p>
+    );
+  };
+
+  if (!bun || (!bun && mainList.length === 0)) {
+    return <EmptyConstructor />;
+  }
+
+  const orderPrice = () => {
+    if (bun.price) {
+      return bun.price * 2 + mainList.reduce((acc, curr) => acc + curr.price, 0);
+    } else {
+      return mainList.reduce((acc, curr) => acc + curr.price, 0);
+    }
   };
 
   return (
@@ -63,7 +77,7 @@ const BurgerConstructor = ({ className, bun, mainList }: IProps) => {
             thumbnail={bun.image}
           />
         </div>
-        <OrderConfirmation onClick={handleOpenModal} price={1234} />
+        <OrderConfirmation onClick={handleOpenModal} price={orderPrice()} />
         {isVisible && (
           <Modal onClose={handleCloseModal}>
             <OrderDetails />

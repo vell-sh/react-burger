@@ -57,7 +57,7 @@ const App = () => {
               className={cn('mr-10', styles.grid)}
               ingredients={state.ingredients}
             />
-            <BurgerConstructor bun={bun} mainList={itemWithoutBuns} className={styles.grid} />
+            <BurgerConstructor bun={bun} ingredientList={itemWithoutBuns} className={styles.grid} />
           </div>
         </main>
       </Provider>

@@ -17,6 +17,7 @@ const OrderConfirmation = ({ price, onClick }: IProps) => {
       </div>
       <Button
         onClick={onClick}
+        disabled={!price}
         extraClass={styles.button}
         htmlType="button"
         type="primary"
