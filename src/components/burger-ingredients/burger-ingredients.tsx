@@ -1,8 +1,10 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import cn from 'classnames';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { getRandomRangeValue } from '../../lib/utils';
 import { formatIngridientType } from '../../services/format.service';
+import { RootState } from '../../store';
 import { IIngredient, IngridientType } from '../../types/ingredientTypes';
 import IngredientDetails from '../ingredient-detail/ingredient-detail';
 import Modal from '../modal/modal';
@@ -13,13 +15,14 @@ import styles from './style.module.css';
 
 interface IProps {
   className?: string;
-  ingredients: Array<IIngredient>;
 }
 
-const BurgerIngredients = ({ className, ingredients }: IProps) => {
+const BurgerIngredients = ({ className }: IProps) => {
   const [current, setCurrent] = React.useState('bun');
   const [currentIngredient, setCurrentIngredient] = React.useState<IIngredient | null>(null);
   const [isVisible, setIsVisible] = React.useState(false);
+
+  const ingredients = useSelector((store: RootState) => store.ingredients.items);
 
   const bunItems = ingredients.filter(x => x.type === 'bun');
   const sauceItems = ingredients.filter(x => x.type === 'sauce');

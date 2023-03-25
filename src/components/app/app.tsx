@@ -1,8 +1,9 @@
+import { AsyncThunkAction } from '@reduxjs/toolkit';
 import cn from 'classnames';
 import React from 'react';
-import { Provider } from 'react-redux';
-import config from '../../config/config';
-import store from '../../store';
+import { Provider, useDispatch } from 'react-redux';
+import { getIngredients } from '../../services/actions/burger-ingredients';
+import store, { AppDispatch } from '../../store';
 import { IIngredient } from '../../types/ingredientTypes';
 import AppHeader from '../app-header/app-header';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
@@ -22,46 +23,25 @@ const App = () => {
     hasError: false,
     ingredients: [],
   });
+  const dispatch = useDispatch<AppDispatch>();
 
   React.useEffect(() => {
-    const getIngredients = () => {
-      setState({ ...state, hasError: false, isLoading: true });
-      fetch(`${config.ingredientsUrl}`)
-        .then(res => {
-          if (res.ok) {
-            return res.json();
-          }
-          return Promise.reject(`Ошибка ${res.status}`);
-        })
-        .then(result => setState({ ...state, ingredients: result.data, isLoading: false }))
-        .catch(() => {
-          setState({ ...state, hasError: true, isLoading: false });
-        });
-    };
-
-    getIngredients();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    dispatch(getIngredients());
+  }, [dispatch]);
 
   const bun = state.ingredients.find(x => x.type === 'bun');
   const itemWithoutBuns = state.ingredients.filter(x => x.type !== 'bun').slice(7);
 
   return (
     <>
-      <Provider store={store}>
-        <AppHeader />
-        <main className={cn('pt-10 pb-10 container', styles.main)}>
-          <h1 className={styles.title}>Соберите бургер</h1>
-          <div className={styles.content}>
-            <BurgerIngredients
-              className={cn('mr-10', styles.grid)}
-              ingredients={state.ingredients}
-            />
-            <BurgerConstructor bun={bun} ingredientList={itemWithoutBuns} className={styles.grid} />
-          </div>
-        </main>
-      </Provider>
-      ,
+      <AppHeader />
+      <main className={cn('pt-10 pb-10 container', styles.main)}>
+        <h1 className={styles.title}>Соберите бургер</h1>
+        <div className={styles.content}>
+          <BurgerIngredients className={cn('mr-10', styles.grid)} />
+          <BurgerConstructor bun={bun} ingredientList={itemWithoutBuns} className={styles.grid} />
+        </div>
+      </main>
     </>
   );
 };
