@@ -1,5 +1,7 @@
 import cn from 'classnames';
 import React from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { useDispatch } from 'react-redux';
 import { getIngredients } from '../../services/actions/burger-ingredients';
 import { AppDispatch } from '../../store';
@@ -28,18 +30,20 @@ const App = () => {
     dispatch(getIngredients());
   }, [dispatch]);
 
-  const bun = state.ingredients.find(x => x.type === 'bun');
-  const itemWithoutBuns = state.ingredients.filter(x => x.type !== 'bun').slice(7);
+  // const bun = state.ingredients.find(x => x.type === 'bun');
+  // const itemWithoutBuns = state.ingredients.filter(x => x.type !== 'bun').slice(7);
 
   return (
     <>
       <AppHeader />
       <main className={cn('pt-10 pb-10 container', styles.main)}>
         <h1 className={styles.title}>Соберите бургер</h1>
-        <div className={styles.content}>
-          <BurgerIngredients className={cn('mr-10', styles.grid)} />
-          <BurgerConstructor bun={bun} ingredientList={itemWithoutBuns} className={styles.grid} />
-        </div>
+        <DndProvider backend={HTML5Backend}>
+          <div className={styles.content}>
+            <BurgerIngredients className={cn('mr-10', styles.grid)} />
+            <BurgerConstructor className={styles.grid} />
+          </div>
+        </DndProvider>
       </main>
     </>
   );

@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ConstructorIngridient, IBurgerConstructor } from '../../types/burgerConstructorTypes';
-import { IIngredient, IngridientType } from '../../types/ingredientTypes';
+import { IIngredient, IngredientType } from '../../types/ingredientTypes';
 import { BURGER_CONSTRUCTOR_ACTIONS_TYPE } from '../actions/burger-constructor';
 import { v4 as uuid } from 'uuid';
 
 const initialState: IBurgerConstructor = {
   bun: null,
-  ingridientList: [],
+  ingredientList: [],
 };
 
 const constructorSlice = createSlice({
@@ -17,11 +17,11 @@ const constructorSlice = createSlice({
       state,
       action: PayloadAction<IIngredient>
     ) => {
-      if (action.payload.type === IngridientType.bun) {
+      if (action.payload.type === IngredientType.bun) {
         state.bun = action.payload;
         return;
       }
-      state.ingridientList.push({
+      state.ingredientList.push({
         constructorId: uuid(),
         ...action.payload,
       });
@@ -30,7 +30,7 @@ const constructorSlice = createSlice({
       state,
       action: PayloadAction<ConstructorIngridient>
     ) => {
-      if (action.payload.type === IngridientType.bun) {
+      if (action.payload.type === IngredientType.bun) {
         if (state.bun === null) {
           return;
         }
@@ -39,20 +39,20 @@ const constructorSlice = createSlice({
         }
         return;
       }
-      state.ingridientList = state.ingridientList.filter(
+      state.ingredientList = state.ingredientList.filter(
         item => item.constructorId !== action.payload.constructorId
       );
     },
     [BURGER_CONSTRUCTOR_ACTIONS_TYPE.CLEAR_CONSTRUCTOR]: state => {
       state.bun = null;
-      state.ingridientList = [];
+      state.ingredientList = [];
     },
     [BURGER_CONSTRUCTOR_ACTIONS_TYPE.SORT_INGREDIENTS]: (
       state,
       action: PayloadAction<{ from: number; to: number }>
     ) => {
-      const [target] = state.ingridientList.splice(action.payload.from, 1);
-      state.ingridientList.splice(action.payload.to, 0, target);
+      const [target] = state.ingredientList.splice(action.payload.from, 1);
+      state.ingredientList.splice(action.payload.to, 0, target);
     },
   },
 });

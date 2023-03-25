@@ -1,6 +1,11 @@
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import cn from 'classnames';
 import React from 'react';
+import { useDrop } from 'react-dnd';
+import { useDispatch, useSelector } from 'react-redux';
+import { v4 as uuid } from 'uuid';
+import { ADD_INGREDIENT } from '../../services/reducers/burger-constructor';
+import { RootState } from '../../store';
 import { IIngredient } from '../../types/ingredientTypes';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
@@ -9,13 +14,20 @@ import OrderConfirmation from './order-confirmation/order-confirmation';
 import styles from './style.module.css';
 
 type IProps = {
-  ingredientList: Array<IIngredient>;
   className?: string;
-  bun?: IIngredient;
 };
 
-const BurgerConstructor = ({ className, bun, ingredientList: mainList }: IProps) => {
+const BurgerConstructor = ({ className }: IProps) => {
   const [isVisible, setIsVisible] = React.useState(false);
+  const dispatch = useDispatch();
+  const { bun, ingredientList } = useSelector((store: RootState) => store.burgerConstructor);
+
+  const [, dropTargetRef] = useDrop({
+    accept: 'add_ingredient',
+    drop(item: IIngredient) {
+      dispatch(ADD_INGREDIENT(item));
+    },
+  });
 
   const handleOpenModal = () => {
     setIsVisible(true);
@@ -31,59 +43,54 @@ const BurgerConstructor = ({ className, bun, ingredientList: mainList }: IProps)
     );
   };
 
-  if (!bun || (!bun && mainList.length === 0)) {
-    return <EmptyConstructor />;
-  }
-
   const orderPrice = () => {
-    if (bun.price) {
-      return bun.price * 2 + mainList.reduce((acc, curr) => acc + curr.price, 0);
+    if (bun && bun.price) {
+      return bun.price * 2 + ingredientList.reduce((acc, curr) => acc + curr.price, 0);
     } else {
-      return mainList.reduce((acc, curr) => acc + curr.price, 0);
+      return ingredientList.reduce((acc, curr) => acc + curr.price, 0);
     }
   };
 
   return (
-    <section className={cn(className, 'pt-100')}>
-      <div className={styles.main}>
-        <div className="pl-4 pr-4">
-          <ConstructorElement
-            type="top"
-            isLocked={true}
-            text={`${bun.name} (верх)`}
-            price={bun.price}
-            thumbnail={bun.image}
-          />
+    <section className={cn(className, 'pt-100')} ref={dropTargetRef}>
+      {!bun || (!bun && ingredientList.length === 0) ? (
+        <EmptyConstructor />
+      ) : (
+        <div className={styles.main}>
+          <div className="pl-4 pr-4">
+            <ConstructorElement
+              type="top"
+              isLocked={true}
+              text={`${bun.name} (верх)`}
+              price={bun.price}
+              thumbnail={bun.image}
+            />
+          </div>
+          <div className={cn(styles.scrollBlock, 'custom-scroll pl-4 pr-4')}>
+            {ingredientList.map(el => (
+              <div key={uuid()} className={styles.availableConstructorItem}>
+                <DragIcon type="primary" />
+                <ConstructorElement text={el.name} price={el.price} thumbnail={el.image} />
+              </div>
+            ))}
+          </div>
+          <div className="pl-4 pr-4">
+            <ConstructorElement
+              type="bottom"
+              isLocked={true}
+              text={`${bun.name} (низ)`}
+              price={bun.price}
+              thumbnail={bun.image}
+            />
+          </div>
+          <OrderConfirmation onClick={handleOpenModal} price={orderPrice()} />
+          {isVisible && (
+            <Modal onClose={handleCloseModal}>
+              <OrderDetails />
+            </Modal>
+          )}
         </div>
-        <div className={cn(styles.scrollBlock, 'custom-scroll pl-4 pr-4')}>
-          {mainList.map(el => (
-            <div key={el._id} className={styles.availableConstructorItem}>
-              <DragIcon type="primary" />
-              <ConstructorElement
-                key={el._id}
-                text={el.name}
-                price={el.price}
-                thumbnail={el.image}
-              />
-            </div>
-          ))}
-        </div>
-        <div className="pl-4 pr-4">
-          <ConstructorElement
-            type="bottom"
-            isLocked={true}
-            text={`${bun.name} (низ)`}
-            price={bun.price}
-            thumbnail={bun.image}
-          />
-        </div>
-        <OrderConfirmation onClick={handleOpenModal} price={orderPrice()} />
-        {isVisible && (
-          <Modal onClose={handleCloseModal}>
-            <OrderDetails />
-          </Modal>
-        )}
-      </div>
+      )}
     </section>
   );
 };

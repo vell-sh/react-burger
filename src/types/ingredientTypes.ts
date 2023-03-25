@@ -1,7 +1,7 @@
 export interface IIngredient {
   _id: string;
   name: string;
-  type: IngridientType;
+  type: IngredientType;
   proteins: number;
   fat: number;
   carbohydrates: number;
@@ -12,7 +12,7 @@ export interface IIngredient {
   image_large: string;
 }
 
-export enum IngridientType {
+export enum IngredientType {
   bun = 'bun',
   main = 'main',
   sauce = 'sauce',

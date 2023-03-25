@@ -3,9 +3,9 @@ import cn from 'classnames';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { getRandomRangeValue } from '../../lib/utils';
-import { formatIngridientType } from '../../services/format.service';
+import { formatIngredientType } from '../../services/format.service';
 import { RootState } from '../../store';
-import { IIngredient, IngridientType } from '../../types/ingredientTypes';
+import { IIngredient, IngredientType } from '../../types/ingredientTypes';
 import IngredientDetails from '../ingredient-detail/ingredient-detail';
 import Modal from '../modal/modal';
 import BurgerIngredient from './burger-ingredient/burger-ingredient';
@@ -41,27 +41,27 @@ const BurgerIngredients = ({ className }: IProps) => {
     <section className={className}>
       <div className={styles.menu}>
         <Tab
-          value={IngridientType.bun}
-          active={current === IngridientType.bun}
+          value={IngredientType.bun}
+          active={current === IngredientType.bun}
           onClick={setCurrent}>
-          {formatIngridientType(IngridientType.bun)}
+          {formatIngredientType(IngredientType.bun)}
         </Tab>
         <Tab
-          value={IngridientType.sauce}
-          active={current === IngridientType.sauce}
+          value={IngredientType.sauce}
+          active={current === IngredientType.sauce}
           onClick={setCurrent}>
-          {formatIngridientType(IngridientType.sauce)}
+          {formatIngredientType(IngredientType.sauce)}
         </Tab>
         <Tab
-          value={IngridientType.main}
-          active={current === IngridientType.main}
+          value={IngredientType.main}
+          active={current === IngredientType.main}
           onClick={setCurrent}>
-          {formatIngridientType(IngridientType.main)}
+          {formatIngredientType(IngredientType.main)}
         </Tab>
       </div>
       <div className={cn('custom-scroll', styles.container)}>
         <div>
-          <BurgerIngredientsWrapper title={formatIngridientType(IngridientType.bun)}>
+          <BurgerIngredientsWrapper title={formatIngredientType(IngredientType.bun)}>
             {bunItems.map(x => (
               <BurgerIngredient
                 key={x._id}
@@ -71,12 +71,12 @@ const BurgerIngredients = ({ className }: IProps) => {
               />
             ))}
           </BurgerIngredientsWrapper>
-          <BurgerIngredientsWrapper title={formatIngridientType(IngridientType.sauce)}>
+          <BurgerIngredientsWrapper title={formatIngredientType(IngredientType.sauce)}>
             {sauceItems.map(x => (
               <BurgerIngredient key={x._id} item={x} onClick={handleOpenModal} />
             ))}
           </BurgerIngredientsWrapper>
-          <BurgerIngredientsWrapper title={formatIngridientType(IngridientType.main)}>
+          <BurgerIngredientsWrapper title={formatIngredientType(IngredientType.main)}>
             {mainItems.map(x => (
               <BurgerIngredient key={x._id} item={x} onClick={handleOpenModal} />
             ))}
