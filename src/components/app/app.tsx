@@ -1,9 +1,8 @@
-import { AsyncThunkAction } from '@reduxjs/toolkit';
 import cn from 'classnames';
 import React from 'react';
-import { Provider, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { getIngredients } from '../../services/actions/burger-ingredients';
-import store, { AppDispatch } from '../../store';
+import { AppDispatch } from '../../store';
 import { IIngredient } from '../../types/ingredientTypes';
 import AppHeader from '../app-header/app-header';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
