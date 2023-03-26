@@ -38,6 +38,7 @@ export const orderSlice = createSlice({
       state.isLoading = false;
     });
     builder.addCase(createOrder.rejected, state => {
+      state.order = null;
       state.isLoading = false;
       state.isError = true;
     });
