@@ -1,6 +1,6 @@
 import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
 import cn from 'classnames';
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useDrop } from 'react-dnd';
 import { useDispatch, useSelector } from 'react-redux';
 import { AnyAction } from 'redux';
@@ -27,7 +27,6 @@ type IProps = {
 const BurgerConstructor = ({ className }: IProps) => {
   const [isVisible, setIsVisible] = React.useState(false);
   const dispatch: ThunkDispatch<RootState, void, AnyAction> = useDispatch();
-
   const { bun, ingredientList } = useSelector((store: RootState) => store.burgerConstructor);
 
   const [, dropTargetRef] = useDrop({
@@ -55,19 +54,16 @@ const BurgerConstructor = ({ className }: IProps) => {
     dispatch(CLEAR_CONSTRUCTOR());
   };
 
-  const EmptyConstructor = () => {
-    return (
-      <p className=" text text_type_main-default">Корзина пуста, добавьте булку для бургера</p>
-    );
-  };
-
-  const orderPrice = () => {
-    if (bun && bun.price) {
-      return bun.price * 2 + ingredientList.reduce((acc, curr) => acc + curr.price, 0);
-    } else {
-      return ingredientList.reduce((acc, curr) => acc + curr.price, 0);
+  const orderPrice = useMemo(() => {
+    if (ingredientList.length === 0) {
+      return 0;
     }
-  };
+    const resultPrice = ingredientList.reduce((acc, item) => (acc += item.price), 0);
+    if (bun !== null) {
+      return resultPrice + bun.price;
+    }
+    return resultPrice;
+  }, [ingredientList, bun]);
 
   const moveItem = useCallback(
     (dragIndex: number, hoverIndex: number) => {
@@ -75,6 +71,12 @@ const BurgerConstructor = ({ className }: IProps) => {
     },
     [dispatch]
   );
+
+  const EmptyConstructor = () => {
+    return (
+      <p className="p-4 text text_type_main-default">Корзина пуста, добавьте булку для бургера</p>
+    );
+  };
 
   return (
     <section className={cn(className, 'pt-100')} ref={dropTargetRef}>
@@ -113,7 +115,7 @@ const BurgerConstructor = ({ className }: IProps) => {
               thumbnail={bun.image}
             />
           </div>
-          <OrderConfirmation onClick={handleOpenModal} price={orderPrice()} />
+          <OrderConfirmation onClick={handleOpenModal} price={orderPrice} />
           {isVisible && (
             <Modal onClose={handleCloseModal}>
               <OrderDetails />
