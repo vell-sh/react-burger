@@ -3,7 +3,6 @@ import cn from 'classnames';
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useIsInViewport } from '../../hooks/use-in-view-port';
-import { getRandomRangeValue } from '../../lib/utils';
 import { formatIngredientType } from '../../services/format.service';
 import {
   ADD_CURRENT_INGREDIENT,
@@ -28,6 +27,9 @@ const BurgerIngredients = ({ className }: IProps) => {
   const dispatch = useDispatch();
 
   const ingredients = useSelector((store: RootState) => store.ingredients.items);
+  const burgerIngredients = useSelector(
+    (store: RootState) => store.burgerConstructor.ingredientList
+  );
   const currentIngredient = useSelector((store: RootState) => store.currentIngredient.item);
 
   const bunItems = ingredients.filter(x => x.type === IngredientType.bun);
@@ -83,6 +85,11 @@ const BurgerIngredients = ({ className }: IProps) => {
     }
   };
 
+  const getCountIngridients = (ingredient: IIngredient) => {
+    const burgerItemsById = burgerIngredients.filter(x => x._id === ingredient._id);
+    return burgerItemsById.length;
+  };
+
   return (
     <section className={className}>
       <div className={styles.menu}>
@@ -111,26 +118,31 @@ const BurgerIngredients = ({ className }: IProps) => {
             title={formatIngredientType(IngredientType.bun)}
             innerRef={bunRef}>
             {bunItems.map(x => (
-              <BurgerIngredient
-                key={x._id}
-                item={x}
-                count={getRandomRangeValue(0, 5)}
-                onClick={handleOpenModal}
-              />
+              <BurgerIngredient key={x._id} item={x} onClick={handleOpenModal} />
             ))}
           </BurgerIngredientsWrapper>
           <BurgerIngredientsWrapper
             title={formatIngredientType(IngredientType.sauce)}
             innerRef={sauceRef}>
             {sauceItems.map(x => (
-              <BurgerIngredient key={x._id} item={x} onClick={handleOpenModal} />
+              <BurgerIngredient
+                count={getCountIngridients(x)}
+                key={x._id}
+                item={x}
+                onClick={handleOpenModal}
+              />
             ))}
           </BurgerIngredientsWrapper>
           <BurgerIngredientsWrapper
             title={formatIngredientType(IngredientType.main)}
             innerRef={mainRef}>
             {mainItems.map(x => (
-              <BurgerIngredient key={x._id} item={x} onClick={handleOpenModal} />
+              <BurgerIngredient
+                count={getCountIngridients(x)}
+                key={x._id}
+                item={x}
+                onClick={handleOpenModal}
+              />
             ))}
           </BurgerIngredientsWrapper>
         </div>
