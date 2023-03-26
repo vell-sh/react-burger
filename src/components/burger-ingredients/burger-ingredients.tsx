@@ -1,6 +1,6 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import cn from 'classnames';
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useIsInViewport } from '../../hooks/use-in-view-port';
 import { formatIngredientType } from '../../services/format.service';
@@ -22,28 +22,31 @@ interface IProps {
 }
 
 const BurgerIngredients = ({ className }: IProps) => {
-  const [currentTab, setCurrentTab] = React.useState<IngredientType>(IngredientType.bun);
-  const [isVisible, setIsVisible] = React.useState(false);
+  const [currentTab, setCurrentTab] = useState<IngredientType>(IngredientType.bun);
   const dispatch = useDispatch();
 
   const ingredients = useSelector((store: RootState) => store.ingredients.items);
-  const burgerIngredients = useSelector(
-    (store: RootState) => store.burgerConstructor.ingredientList
-  );
   const currentIngredient = useSelector((store: RootState) => store.currentIngredient.item);
 
-  const bunItems = ingredients.filter(x => x.type === IngredientType.bun);
-  const sauceItems = ingredients.filter(x => x.type === IngredientType.sauce);
-  const mainItems = ingredients.filter(x => x.type === IngredientType.main);
+  const bunItems = useMemo(
+    () => ingredients.filter(x => x.type === IngredientType.bun),
+    [ingredients]
+  );
+  const sauceItems = useMemo(
+    () => ingredients.filter(x => x.type === IngredientType.sauce),
+    [ingredients]
+  );
+  const mainItems = useMemo(
+    () => ingredients.filter(x => x.type === IngredientType.main),
+    [ingredients]
+  );
 
   const handleOpenModal = (ingredient: IIngredient) => {
     dispatch(ADD_CURRENT_INGREDIENT(ingredient));
-    setIsVisible(true);
   };
 
   const handleCloseModal = () => {
     dispatch(REMOVE_CURRENT_INGREDIENT());
-    setIsVisible(false);
   };
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -85,11 +88,6 @@ const BurgerIngredients = ({ className }: IProps) => {
     }
   };
 
-  const getCountIngridients = (ingredient: IIngredient) => {
-    const burgerItemsById = burgerIngredients.filter(x => x._id === ingredient._id);
-    return burgerItemsById.length;
-  };
-
   return (
     <section className={className}>
       <div className={styles.menu}>
@@ -125,29 +123,19 @@ const BurgerIngredients = ({ className }: IProps) => {
             title={formatIngredientType(IngredientType.sauce)}
             innerRef={sauceRef}>
             {sauceItems.map(x => (
-              <BurgerIngredient
-                count={getCountIngridients(x)}
-                key={x._id}
-                item={x}
-                onClick={handleOpenModal}
-              />
+              <BurgerIngredient key={x._id} item={x} onClick={handleOpenModal} />
             ))}
           </BurgerIngredientsWrapper>
           <BurgerIngredientsWrapper
             title={formatIngredientType(IngredientType.main)}
             innerRef={mainRef}>
             {mainItems.map(x => (
-              <BurgerIngredient
-                count={getCountIngridients(x)}
-                key={x._id}
-                item={x}
-                onClick={handleOpenModal}
-              />
+              <BurgerIngredient key={x._id} item={x} onClick={handleOpenModal} />
             ))}
           </BurgerIngredientsWrapper>
         </div>
       </div>
-      {isVisible && (
+      {currentIngredient && (
         <Modal title="Детали ингредиента" onClose={handleCloseModal}>
           <IngredientDetails ingredient={currentIngredient!} />
         </Modal>

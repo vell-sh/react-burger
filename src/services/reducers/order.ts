@@ -6,14 +6,12 @@ export interface OrderState {
   order: IOrder | null;
   isLoading: boolean;
   isError: boolean;
-  isOpenModal: boolean;
 }
 
 export const initialState: OrderState = {
   order: null,
   isLoading: false,
   isError: false,
-  isOpenModal: false,
 };
 
 export const orderSlice = createSlice({
@@ -22,7 +20,6 @@ export const orderSlice = createSlice({
   reducers: {
     [ORDER_ACTIONS_TYPE.CLEAR_ORDER]: state => {
       state.order = null;
-      state.isOpenModal = false;
     },
   },
   extraReducers: builder => {
@@ -33,7 +30,6 @@ export const orderSlice = createSlice({
     builder.addCase(createOrder.fulfilled, (state, { payload }) => {
       if (payload.success) {
         state.order = payload.order;
-        state.isOpenModal = true;
       }
       state.isLoading = false;
     });

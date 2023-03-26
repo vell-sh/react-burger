@@ -1,17 +1,18 @@
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import cn from 'classnames';
 import { useDrag } from 'react-dnd';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store';
 import { IIngredient } from '../../../types/ingredientTypes';
 
 import styles from './style.module.css';
 
 type IProps = {
   item: IIngredient;
-  count?: number;
   onClick(item: IIngredient): void;
 };
 
-const BurgerIngredient = ({ item, count, onClick }: IProps) => {
+const BurgerIngredient = ({ item, onClick }: IProps) => {
   const { name, image, price } = item;
 
   const [{ isDrag }, dragRef] = useDrag({
@@ -21,8 +22,22 @@ const BurgerIngredient = ({ item, count, onClick }: IProps) => {
       isDrag: monitor.isDragging(),
     }),
   });
-
   const opacity = isDrag ? 0.4 : 1;
+
+  const burgerIngredients = useSelector(
+    (store: RootState) => store.burgerConstructor.ingredientList
+  );
+  const bun = useSelector((store: RootState) => store.burgerConstructor.bun);
+
+  const getCountIngridients = () => {
+    if (bun && item._id === bun._id) {
+      return 1;
+    }
+    const burgerItemsById = burgerIngredients.filter(x => x._id === item._id);
+    return burgerItemsById.length;
+  };
+
+  const count = getCountIngridients();
 
   return (
     <div

@@ -8,5 +8,8 @@ export const getIngredients = createAsyncThunk<ApiAnswer>('ingridients/get', asy
   const response = await fetch(config.ingredientsUrl, {
     method: 'GET',
   });
-  return (await response.json()) as ApiAnswer;
+  if (response.ok) {
+    return response.json();
+  }
+  return response.json().then(err => Promise.reject(err));
 });

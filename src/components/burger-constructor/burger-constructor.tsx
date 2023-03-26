@@ -1,6 +1,6 @@
 import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
 import cn from 'classnames';
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useDrop } from 'react-dnd';
 import { useDispatch, useSelector } from 'react-redux';
 import { AnyAction } from 'redux';
@@ -11,6 +11,7 @@ import {
   CLEAR_CONSTRUCTOR,
   SORT_INGREDIENTS,
 } from '../../services/reducers/burger-constructor';
+import { CLEAR_ORDER } from '../../services/reducers/order';
 import { RootState } from '../../store';
 import { IIngredient } from '../../types/ingredientTypes';
 import Modal from '../modal/modal';
@@ -25,9 +26,9 @@ type IProps = {
 };
 
 const BurgerConstructor = ({ className }: IProps) => {
-  const [isVisible, setIsVisible] = React.useState(false);
   const dispatch: ThunkDispatch<RootState, void, AnyAction> = useDispatch();
   const { bun, ingredientList } = useSelector((store: RootState) => store.burgerConstructor);
+  const order = useSelector((store: RootState) => store.order.order?.number);
 
   const [, dropTargetRef] = useDrop({
     accept: 'add_ingredient',
@@ -44,14 +45,13 @@ const BurgerConstructor = ({ className }: IProps) => {
     postData.unshift(bun._id);
     postData.push(bun._id);
 
-    dispatch(createOrder({ ingredients: postData }));
     // TODO обработать ошибку
-    setIsVisible(true);
+    dispatch(createOrder({ ingredients: postData }));
   };
 
   const handleCloseModal = () => {
-    setIsVisible(false);
     dispatch(CLEAR_CONSTRUCTOR());
+    dispatch(CLEAR_ORDER());
   };
 
   const orderPrice = useMemo(() => {
@@ -65,12 +65,9 @@ const BurgerConstructor = ({ className }: IProps) => {
     return resultPrice;
   }, [ingredientList, bun]);
 
-  const moveItem = useCallback(
-    (dragIndex: number, hoverIndex: number) => {
-      dispatch(SORT_INGREDIENTS({ from: dragIndex, to: hoverIndex }));
-    },
-    [dispatch]
-  );
+  const moveItem = (dragIndex: number, hoverIndex: number) => {
+    dispatch(SORT_INGREDIENTS({ from: dragIndex, to: hoverIndex }));
+  };
 
   const EmptyConstructor = () => {
     return (
@@ -116,7 +113,7 @@ const BurgerConstructor = ({ className }: IProps) => {
             />
           </div>
           <OrderConfirmation onClick={handleOpenModal} price={orderPrice} />
-          {isVisible && (
+          {!!order && (
             <Modal onClose={handleCloseModal}>
               <OrderDetails />
             </Modal>

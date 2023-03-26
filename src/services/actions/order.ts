@@ -19,6 +19,9 @@ export const createOrder = createAsyncThunk(
         'Content-Type': 'application/json',
       },
     });
-    return await response.json();
+    if (response.ok) {
+      return response.json();
+    }
+    return response.json().then(err => Promise.reject(err));
   }
 );
