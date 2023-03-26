@@ -1,9 +1,13 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import cn from 'classnames';
 import React, { useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getRandomRangeValue } from '../../lib/utils';
 import { formatIngredientType } from '../../services/format.service';
+import {
+  ADD_CURRENT_INGREDIENT,
+  REMOVE_CURRENT_INGREDIENT,
+} from '../../services/reducers/current-ingredient';
 import { RootState } from '../../store';
 import { IIngredient, IngredientType } from '../../types/ingredientTypes';
 import IngredientDetails from '../ingredient-detail/ingredient-detail';
@@ -19,21 +23,23 @@ interface IProps {
 
 const BurgerIngredients = ({ className }: IProps) => {
   const [current, setCurrent] = React.useState(IngredientType.bun as string);
-  const [currentIngredient, setCurrentIngredient] = React.useState<IIngredient | null>(null);
   const [isVisible, setIsVisible] = React.useState(false);
+  const dispatch = useDispatch();
 
   const ingredients = useSelector((store: RootState) => store.ingredients.items);
+  const currentIngredient = useSelector((store: RootState) => store.currentIngredient.item);
 
   const bunItems = ingredients.filter(x => x.type === IngredientType.bun);
   const sauceItems = ingredients.filter(x => x.type === IngredientType.sauce);
   const mainItems = ingredients.filter(x => x.type === IngredientType.main);
 
   const handleOpenModal = (ingredient: IIngredient) => {
-    setCurrentIngredient(ingredient);
+    dispatch(ADD_CURRENT_INGREDIENT(ingredient));
     setIsVisible(true);
   };
 
   const handleCloseModal = () => {
+    dispatch(REMOVE_CURRENT_INGREDIENT());
     setIsVisible(false);
   };
 

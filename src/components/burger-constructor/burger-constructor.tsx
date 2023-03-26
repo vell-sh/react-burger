@@ -6,7 +6,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AnyAction } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { createOrder } from '../../services/actions/order';
-import { ADD_INGREDIENT, SORT_INGREDIENTS } from '../../services/reducers/burger-constructor';
+import {
+  ADD_INGREDIENT,
+  CLEAR_CONSTRUCTOR,
+  SORT_INGREDIENTS,
+} from '../../services/reducers/burger-constructor';
 import { RootState } from '../../store';
 import { IIngredient } from '../../types/ingredientTypes';
 import Modal from '../modal/modal';
@@ -48,6 +52,7 @@ const BurgerConstructor = ({ className }: IProps) => {
 
   const handleCloseModal = () => {
     setIsVisible(false);
+    dispatch(CLEAR_CONSTRUCTOR());
   };
 
   const EmptyConstructor = () => {
