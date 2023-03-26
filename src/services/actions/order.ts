@@ -3,27 +3,22 @@ import config from '../../config/config';
 
 import { IOrder } from '../../types/orderTypes';
 
-type ApiAnswer = { success: boolean; order: IOrder };
+type ApiAnswer = { success: boolean; order: IOrder; postData: string[] };
 
 export enum ORDER_ACTIONS_TYPE {
   CLEAR_ORDER = 'CLEAR_ORDER',
 }
 
-export const createOrder = createAsyncThunk<ApiAnswer>(
-  'order/create',
-  async (order, { rejectWithValue }) => {
-    try {
-      const response = await fetch(config.ingredientsUrl, {
-        method: 'POST',
-        body: JSON.stringify(order),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      const data = await response.json();
-      return data as ApiAnswer;
-    } catch (err) {
-      return rejectWithValue(err);
-    }
+export const createOrder = createAsyncThunk(
+  'users/fetchById',
+  async (postData: { ingredients: string[] }): Promise<ApiAnswer> => {
+    const response = await fetch(config.orderUrl, {
+      method: 'POST',
+      body: JSON.stringify(postData),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    return await response.json();
   }
 );

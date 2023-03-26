@@ -3,7 +3,10 @@ import cn from 'classnames';
 import React, { useCallback } from 'react';
 import { useDrop } from 'react-dnd';
 import { useDispatch, useSelector } from 'react-redux';
+import { AnyAction } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
 import { v4 as uuid } from 'uuid';
+import { createOrder } from '../../services/actions/order';
 import { ADD_INGREDIENT, SORT_INGREDIENTS } from '../../services/reducers/burger-constructor';
 import { RootState } from '../../store';
 import { IIngredient } from '../../types/ingredientTypes';
@@ -20,7 +23,8 @@ type IProps = {
 
 const BurgerConstructor = ({ className }: IProps) => {
   const [isVisible, setIsVisible] = React.useState(false);
-  const dispatch = useDispatch();
+  const dispatch: ThunkDispatch<RootState, void, AnyAction> = useDispatch();
+
   const { bun, ingredientList } = useSelector((store: RootState) => store.burgerConstructor);
 
   const [, dropTargetRef] = useDrop({
@@ -31,6 +35,15 @@ const BurgerConstructor = ({ className }: IProps) => {
   });
 
   const handleOpenModal = () => {
+    if (!bun) {
+      return; // TODO Сделать модалку с ошибкой
+    }
+    const postData = ingredientList.map(x => x._id);
+    postData.unshift(bun._id);
+    postData.push(bun._id);
+
+    dispatch(createOrder({ ingredients: postData }));
+    // TODO обработать ошибку
     setIsVisible(true);
   };
 
