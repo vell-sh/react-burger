@@ -1,7 +1,8 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import cn from 'classnames';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useIsInViewport } from '../../hooks/use-in-view-port';
 import { getRandomRangeValue } from '../../lib/utils';
 import { formatIngredientType } from '../../services/format.service';
 import {
@@ -22,7 +23,7 @@ interface IProps {
 }
 
 const BurgerIngredients = ({ className }: IProps) => {
-  const [current, setCurrent] = React.useState(IngredientType.bun as string);
+  const [currentTab, setCurrentTab] = React.useState<IngredientType>(IngredientType.bun);
   const [isVisible, setIsVisible] = React.useState(false);
   const dispatch = useDispatch();
 
@@ -60,8 +61,22 @@ const BurgerIngredients = ({ className }: IProps) => {
     }
   };
 
-  const onScroll = (to: IngredientType) => {
-    setCurrent(to);
+  const isBunViewport = useIsInViewport(bunRef);
+  const isSauceInViewport = useIsInViewport(sauceRef);
+  const isMainInViewport = useIsInViewport(mainRef);
+
+  useEffect(() => {
+    if (isBunViewport) {
+      setCurrentTab(IngredientType.bun);
+    } else if (isSauceInViewport) {
+      setCurrentTab(IngredientType.sauce);
+    } else {
+      setCurrentTab(IngredientType.main);
+    }
+  }, [isBunViewport, isSauceInViewport, isMainInViewport]);
+
+  const onTabClick = (to: IngredientType) => {
+    setCurrentTab(to);
     const ref = getRefFromIngredientType(to);
     if (ref.current) {
       ref.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
@@ -73,20 +88,20 @@ const BurgerIngredients = ({ className }: IProps) => {
       <div className={styles.menu}>
         <Tab
           value={IngredientType.bun}
-          active={current === IngredientType.bun}
-          onClick={() => onScroll(IngredientType.bun)}>
+          active={currentTab === IngredientType.bun}
+          onClick={() => onTabClick(IngredientType.bun)}>
           {formatIngredientType(IngredientType.bun)}
         </Tab>
         <Tab
           value={IngredientType.sauce}
-          active={current === IngredientType.sauce}
-          onClick={() => onScroll(IngredientType.sauce)}>
+          active={currentTab === IngredientType.sauce}
+          onClick={() => onTabClick(IngredientType.sauce)}>
           {formatIngredientType(IngredientType.sauce)}
         </Tab>
         <Tab
           value={IngredientType.main}
-          active={current === IngredientType.main}
-          onClick={() => onScroll(IngredientType.main)}>
+          active={currentTab === IngredientType.main}
+          onClick={() => onTabClick(IngredientType.main)}>
           {formatIngredientType(IngredientType.main)}
         </Tab>
       </div>
