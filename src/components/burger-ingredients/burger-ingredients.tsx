@@ -57,9 +57,6 @@ const BurgerIngredients = ({ className }: IProps) => {
   const onScroll = (to: IngredientType) => {
     setCurrent(to);
     const ref = getRefFromIngredientType(to);
-    console.log(to);
-    console.log(ref.current);
-    console.log(current);
     if (ref.current) {
       ref.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
     }

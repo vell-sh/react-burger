@@ -12,26 +12,12 @@ import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 
 import styles from './style.module.css';
 
-interface IIngredientsLoad {
-  isLoading: boolean;
-  hasError: boolean;
-  ingredients: Array<IIngredient>;
-}
-
 const App = () => {
-  const [state, setState] = React.useState<IIngredientsLoad>({
-    isLoading: false,
-    hasError: false,
-    ingredients: [],
-  });
   const dispatch = useDispatch<AppDispatch>();
 
   React.useEffect(() => {
     dispatch(getIngredients());
   }, [dispatch]);
-
-  // const bun = state.ingredients.find(x => x.type === 'bun');
-  // const itemWithoutBuns = state.ingredients.filter(x => x.type !== 'bun').slice(7);
 
   return (
     <>
