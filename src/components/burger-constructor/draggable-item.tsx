@@ -2,10 +2,12 @@ import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burg
 import type { Identifier, XYCoord } from 'dnd-core';
 import { useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
+import { useDispatch } from 'react-redux';
+import { REMOVE_INGREDIENT } from '../../services/reducers/burger-constructor';
 import styles from './style.module.css';
 
 interface IProps {
-  id: any;
+  id: string;
   index: number;
   text: string;
   price: number;
@@ -28,6 +30,9 @@ export const DraggableItem = ({
   thumbnail,
   ...props
 }: IProps) => {
+  const dispatch = useDispatch();
+
+  // --- DnD --- //
   const ref = useRef<HTMLDivElement>(null);
   const [{ handlerId }, drop] = useDrop<DragItem, void, { handlerId: Identifier | null }>({
     accept: 'sortItem',
@@ -71,10 +76,16 @@ export const DraggableItem = ({
       isDragging: monitor.isDragging(),
     }),
   });
-  console.log(isDragging);
 
   const opacity = isDragging ? 0 : 1;
   drag(drop(ref));
+
+  // --- DnD --- //
+
+  const onDelete = () => {
+    dispatch(REMOVE_INGREDIENT(id));
+  };
+
   return (
     <div
       ref={ref}
@@ -83,7 +94,12 @@ export const DraggableItem = ({
       key={id}
       className={styles.availableConstructorItem}>
       <DragIcon type="primary" />
-      <ConstructorElement text={text} price={price} thumbnail={thumbnail} />
+      <ConstructorElement
+        handleClose={() => onDelete()}
+        text={text}
+        price={price}
+        thumbnail={thumbnail}
+      />
     </div>
   );
 };

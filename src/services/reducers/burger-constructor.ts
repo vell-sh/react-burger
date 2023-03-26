@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ConstructorIngridient, IBurgerConstructor } from '../../types/burgerConstructorTypes';
+import { IBurgerConstructor } from '../../types/burgerConstructorTypes';
 import { IIngredient, IngredientType } from '../../types/ingredientTypes';
 import { BURGER_CONSTRUCTOR_ACTIONS_TYPE } from '../actions/burger-constructor';
 import { v4 as uuid } from 'uuid';
@@ -28,19 +28,10 @@ const constructorSlice = createSlice({
     },
     [BURGER_CONSTRUCTOR_ACTIONS_TYPE.REMOVE_INGREDIENT]: (
       state,
-      action: PayloadAction<ConstructorIngridient>
+      action: PayloadAction<string>
     ) => {
-      if (action.payload.type === IngredientType.bun) {
-        if (state.bun === null) {
-          return;
-        }
-        if (action.payload._id === state.bun._id) {
-          state.bun = null;
-        }
-        return;
-      }
       state.ingredientList = state.ingredientList.filter(
-        item => item.constructorId !== action.payload.constructorId
+        item => item.constructorId !== action.payload
       );
     },
     [BURGER_CONSTRUCTOR_ACTIONS_TYPE.CLEAR_CONSTRUCTOR]: state => {

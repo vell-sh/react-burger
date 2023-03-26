@@ -5,7 +5,6 @@ import { useDrop } from 'react-dnd';
 import { useDispatch, useSelector } from 'react-redux';
 import { AnyAction } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
-import { v4 as uuid } from 'uuid';
 import { createOrder } from '../../services/actions/order';
 import { ADD_INGREDIENT, SORT_INGREDIENTS } from '../../services/reducers/burger-constructor';
 import { RootState } from '../../store';
@@ -91,8 +90,8 @@ const BurgerConstructor = ({ className }: IProps) => {
             {ingredientList.map((el, index) => (
               <DraggableItem
                 moveItem={moveItem}
-                key={uuid()}
-                id={uuid()}
+                key={el.constructorId}
+                id={el.constructorId}
                 index={index}
                 text={el.name}
                 price={el.price}
