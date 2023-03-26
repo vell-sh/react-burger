@@ -19,8 +19,11 @@ const Modal = (props: IProps) => {
 
   const modalClassName = cn(styles.modal, 'pl-10 pt-10 pr-10 pb-10');
 
-  const handleEscKey = () => {
-    onClose();
+  const handleEscKey = (e: KeyboardEvent) => {
+    // TODO Код перенести в константы
+    if (e.key === 'Escape') {
+      onClose();
+    }
   };
 
   React.useEffect(() => {
