@@ -1,8 +1,15 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import cn from 'classnames';
-import React from 'react';
-import { getRandomRangeValue } from '../../lib/utils';
-import { IIngredient } from '../../types/ingredientTypes';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useIsInViewport } from '../../hooks/use-in-view-port';
+import { formatIngredientType } from '../../services/format.service';
+import {
+  ADD_CURRENT_INGREDIENT,
+  REMOVE_CURRENT_INGREDIENT,
+} from '../../services/reducers/current-ingredient';
+import { RootState } from '../../store';
+import { IIngredient, IngredientType } from '../../types/ingredientTypes';
 import IngredientDetails from '../ingredient-detail/ingredient-detail';
 import Modal from '../modal/modal';
 import BurgerIngredient from './burger-ingredient/burger-ingredient';
@@ -12,65 +19,123 @@ import styles from './style.module.css';
 
 interface IProps {
   className?: string;
-  ingredients: Array<IIngredient>;
 }
 
-const BurgerIngredients = ({ className, ingredients }: IProps) => {
-  const [current, setCurrent] = React.useState('bun');
-  const [currentIngredient, setCurrentIngredient] = React.useState<IIngredient | null>(null);
-  const [isVisible, setIsVisible] = React.useState(false);
+const BurgerIngredients = ({ className }: IProps) => {
+  const [currentTab, setCurrentTab] = useState<IngredientType>(IngredientType.bun);
+  const dispatch = useDispatch();
 
-  const bunItems = ingredients.filter(x => x.type === 'bun');
-  const sauceItems = ingredients.filter(x => x.type === 'sauce');
-  const mainItems = ingredients.filter(x => x.type === 'main');
+  const ingredients = useSelector((store: RootState) => store.ingredients.items);
+  const currentIngredient = useSelector((store: RootState) => store.currentIngredient.item);
+
+  const bunItems = useMemo(
+    () => ingredients.filter(x => x.type === IngredientType.bun),
+    [ingredients]
+  );
+  const sauceItems = useMemo(
+    () => ingredients.filter(x => x.type === IngredientType.sauce),
+    [ingredients]
+  );
+  const mainItems = useMemo(
+    () => ingredients.filter(x => x.type === IngredientType.main),
+    [ingredients]
+  );
 
   const handleOpenModal = (ingredient: IIngredient) => {
-    setCurrentIngredient(ingredient);
-    setIsVisible(true);
+    dispatch(ADD_CURRENT_INGREDIENT(ingredient));
   };
 
   const handleCloseModal = () => {
-    setIsVisible(false);
+    dispatch(REMOVE_CURRENT_INGREDIENT());
+  };
+
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const bunRef = useRef<HTMLDivElement>(null);
+  const sauceRef = useRef<HTMLDivElement>(null);
+  const mainRef = useRef<HTMLDivElement>(null);
+
+  const getRefFromIngredientType = (type: IngredientType) => {
+    switch (type) {
+      case IngredientType.sauce:
+        return sauceRef;
+      case IngredientType.main:
+        return mainRef;
+      case IngredientType.bun:
+      default:
+        return bunRef;
+    }
+  };
+
+  const isBunViewport = useIsInViewport(bunRef);
+  const isSauceInViewport = useIsInViewport(sauceRef);
+  const isMainInViewport = useIsInViewport(mainRef);
+
+  useEffect(() => {
+    if (isBunViewport) {
+      setCurrentTab(IngredientType.bun);
+    } else if (isSauceInViewport) {
+      setCurrentTab(IngredientType.sauce);
+    } else {
+      setCurrentTab(IngredientType.main);
+    }
+  }, [isBunViewport, isSauceInViewport, isMainInViewport]);
+
+  const onTabClick = (to: IngredientType) => {
+    setCurrentTab(to);
+    const ref = getRefFromIngredientType(to);
+    if (ref.current) {
+      ref.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    }
   };
 
   return (
     <section className={className}>
       <div className={styles.menu}>
-        <Tab value="bun" active={current === 'bun'} onClick={setCurrent}>
-          Булки
+        <Tab
+          value={IngredientType.bun}
+          active={currentTab === IngredientType.bun}
+          onClick={() => onTabClick(IngredientType.bun)}>
+          {formatIngredientType(IngredientType.bun)}
         </Tab>
-        <Tab value="sauce" active={current === 'sauce'} onClick={setCurrent}>
-          Соусы
+        <Tab
+          value={IngredientType.sauce}
+          active={currentTab === IngredientType.sauce}
+          onClick={() => onTabClick(IngredientType.sauce)}>
+          {formatIngredientType(IngredientType.sauce)}
         </Tab>
-        <Tab value="main" active={current === 'main'} onClick={setCurrent}>
-          Начинки
+        <Tab
+          value={IngredientType.main}
+          active={currentTab === IngredientType.main}
+          onClick={() => onTabClick(IngredientType.main)}>
+          {formatIngredientType(IngredientType.main)}
         </Tab>
       </div>
-      <div className={cn('custom-scroll', styles.container)}>
+      <div className={cn('custom-scroll', styles.container)} ref={scrollContainerRef}>
         <div>
-          <BurgerIngredientsWrapper title="Булки">
+          <BurgerIngredientsWrapper
+            title={formatIngredientType(IngredientType.bun)}
+            innerRef={bunRef}>
             {bunItems.map(x => (
-              <BurgerIngredient
-                key={x._id}
-                item={x}
-                count={getRandomRangeValue(0, 5)}
-                onClick={handleOpenModal}
-              />
+              <BurgerIngredient key={x._id} item={x} onClick={handleOpenModal} />
             ))}
           </BurgerIngredientsWrapper>
-          <BurgerIngredientsWrapper title="Соусы">
+          <BurgerIngredientsWrapper
+            title={formatIngredientType(IngredientType.sauce)}
+            innerRef={sauceRef}>
             {sauceItems.map(x => (
               <BurgerIngredient key={x._id} item={x} onClick={handleOpenModal} />
             ))}
           </BurgerIngredientsWrapper>
-          <BurgerIngredientsWrapper title="Начинки">
+          <BurgerIngredientsWrapper
+            title={formatIngredientType(IngredientType.main)}
+            innerRef={mainRef}>
             {mainItems.map(x => (
               <BurgerIngredient key={x._id} item={x} onClick={handleOpenModal} />
             ))}
           </BurgerIngredientsWrapper>
         </div>
       </div>
-      {isVisible && (
+      {currentIngredient && (
         <Modal title="Детали ингредиента" onClose={handleCloseModal}>
           <IngredientDetails ingredient={currentIngredient!} />
         </Modal>

@@ -1,20 +1,50 @@
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import cn from 'classnames';
+import { useMemo } from 'react';
+import { useDrag } from 'react-dnd';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store';
 import { IIngredient } from '../../../types/ingredientTypes';
 
 import styles from './style.module.css';
 
 type IProps = {
   item: IIngredient;
-  count?: number;
   onClick(item: IIngredient): void;
 };
 
-const BurgerIngredient = ({ item, count, onClick }: IProps) => {
+const BurgerIngredient = ({ item, onClick }: IProps) => {
   const { name, image, price } = item;
+
+  const [{ isDrag }, dragRef] = useDrag({
+    type: 'add_ingredient',
+    item,
+    collect: monitor => ({
+      isDrag: monitor.isDragging(),
+    }),
+  });
+  const opacity = isDrag ? 0.4 : 1;
+
+  const burgerIngredients = useSelector(
+    (store: RootState) => store.burgerConstructor.ingredientList
+  );
+  const bun = useSelector((store: RootState) => store.burgerConstructor.bun);
+
+  const countIngredients = useMemo(() => {
+    if (bun && item._id === bun._id) {
+      return 1;
+    }
+    const burgerItemsById = burgerIngredients.filter(x => x._id === item._id);
+    return burgerItemsById.length;
+  }, [bun, burgerIngredients, item._id]);
+
   return (
-    <div className={cn(styles.wrapper)} onClick={() => onClick(item)}>
-      {!!count && <Counter count={count} size="default" extraClass="m-1" />}
+    <div
+      className={cn(styles.wrapper)}
+      onClick={() => onClick(item)}
+      ref={dragRef}
+      style={{ opacity }}>
+      {!!countIngredients && <Counter count={countIngredients} size="default" extraClass="m-1" />}
       <img src={image} alt={name} />
       <p className={styles.price}>
         <span className="mr-2">{price}</span>

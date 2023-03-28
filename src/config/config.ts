@@ -1,7 +1,8 @@
-const apiUrl = 'https://norma.nomoreparties.space';
+const apiUrl = 'https://norma.nomoreparties.space/api';
 
 const config = {
-  ingredientsUrl: `${apiUrl}/api/ingredients`,
+  ingredientsUrl: `${apiUrl}/ingredients`,
+  orderUrl: `${apiUrl}/orders/`,
 };
 
 export default config;

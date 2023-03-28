@@ -1,12 +1,11 @@
 .main {
-  max-height: calc(100vh - 88px);
   display: flex;
   flex-direction: column;
 }
 
 .content {
   display: flex;
-  overflow: hidden;
+  max-height: calc(100vh - 170px);
 }
 
 .title {
