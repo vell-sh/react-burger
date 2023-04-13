@@ -1,5 +1,51 @@
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../../hooks/use-app-dispatch';
+
+import cn from 'classnames';
+import { logoutUser } from '../../services/actions/auth';
+import { getCookie } from '../../utils/utils';
+import styles from './styles.module.css';
+
 const ProfilePage = () => {
-  return <div>Profile</div>;
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const refreshToken = getCookie('refreshToken');
+
+  const onLogout = async () => {
+    if (refreshToken) {
+      await dispatch(logoutUser(refreshToken));
+    }
+    navigate('/login');
+  };
+
+  const textClassName = 'text text_type_main-medium pt-3 pb-3  text-non-decoration ';
+
+  return (
+    <div className={cn('pt-30 container', styles.main)}>
+      <div className={styles.menu}>
+        <NavLink
+          className={({ isActive }) => cn(textClassName, isActive ? 'text-main' : 'text-secondary')}
+          to="/profile"
+          end>
+          Профиль
+        </NavLink>
+        <NavLink
+          className={({ isActive }) => cn(textClassName, isActive ? 'text-main' : 'text-secondary')}
+          to="/profile/orders">
+          История заказов
+        </NavLink>
+        <span onClick={onLogout} className={cn(textClassName, 'text-secondary', styles.linkLogout)}>
+          Выход
+        </span>
+        <p className={cn(styles.info, 'text text_type_main-default mt-20 text-secondary')}>
+          В этом разделе вы можете изменить свои персональные данные
+        </p>
+      </div>
+      <div className="pl-15">
+        <Outlet />
+      </div>
+    </div>
+  );
 };
 
 export default ProfilePage;

@@ -1,15 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { registerUser, loginUser, getUser } from '../actions/auth';
+import { registerUser, loginUser, getUser, logoutUser } from '../actions/auth';
+import { IUser } from '../../types/userTypes';
 
 export interface IUserState {
   isLoading: boolean;
   isError: boolean;
   user: IUser | null;
-}
-
-interface IUser {
-  email: string;
-  name: string;
 }
 
 const initialState: IUserState = {
@@ -65,6 +61,21 @@ const authSlice = createSlice({
       state.isLoading = false;
     });
     builder.addCase(getUser.rejected, state => {
+      state.isLoading = false;
+      state.isError = true;
+    });
+    /* --- logout --- */
+    builder.addCase(logoutUser.pending, state => {
+      state.isLoading = true;
+      state.isError = false;
+    });
+    builder.addCase(logoutUser.fulfilled, (state, { payload }) => {
+      if (payload.success) {
+        state.user = null;
+      }
+      state.isLoading = false;
+    });
+    builder.addCase(logoutUser.rejected, state => {
       state.isLoading = false;
       state.isError = true;
     });

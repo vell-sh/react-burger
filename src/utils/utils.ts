@@ -1,8 +1,9 @@
+/* eslint-disable no-useless-escape */
 import config from '../config/config';
 
 // ---------- fetch with refresh ---------- //
 
-const checkResponse = (res: Response) => {
+export const checkResponse = (res: Response) => {
   return res.ok ? res.json() : res.json().then(err => Promise.reject(err));
 };
 
@@ -13,7 +14,7 @@ export const refreshToken = async () => {
       'Content-Type': 'application/json;charset=utf-8',
     },
     body: JSON.stringify({
-      token: localStorage.getItem('refreshToken'),
+      token: getCookie('refreshToken'),
     }),
   });
   return checkResponse(res);

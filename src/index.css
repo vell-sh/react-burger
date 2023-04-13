@@ -31,8 +31,16 @@ svg {
   color: #8585AD
 }
 
+.text-main {
+  color: #F2F2F3
+}
+
 .link {
   color: #4C4CFF;
+  text-decoration: none;
+}
+
+.text-non-decoration {
   text-decoration: none;
 }
 

@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import config from '../../config/config';
-import { fetchWithRefresh, setCookie } from '../../utils/utils';
+import { checkResponse, fetchWithRefresh, setCookie } from '../../utils/utils';
 
 interface ICreateUserForm {
   name: string;
@@ -19,7 +19,7 @@ export const getUser = createAsyncThunk('getUser/get', async (token: string) => 
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',
-      Authorization: `Bearer ${token}`,
+      Authorization: token,
     },
   });
   return result;
@@ -60,6 +60,26 @@ export const loginUser = createAsyncThunk('login/post', async (form: ILoginUserF
   setCookie('accessToken', authToken, {});
   setCookie('refreshToken', result.refreshToken, {});
   return result;
+});
+
+export const logoutUser = createAsyncThunk('logout/post', async (token: string) => {
+  try {
+    const res = await fetch(config.logoutUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        token: token,
+      }),
+    });
+    setCookie('accessToken', null, {});
+    setCookie('refreshToken', null, {});
+    const result = await checkResponse(res);
+    return result;
+  } catch (err: any) {
+    return Promise.reject(err);
+  }
 });
 
 /*

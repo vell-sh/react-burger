@@ -6,6 +6,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styles from './styles.module.css';
 import { useAppDispatch } from '../../../hooks/use-app-dispatch';
 import { loginUser } from '../../../services/actions/auth';
+import { SET_USER } from '../../../services/reducers/user';
 
 type LoginType = {
   email: string;
@@ -27,7 +28,10 @@ const LoginPage = () => {
   const onSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
     const { email, password } = form;
-    await dispatch(loginUser({ email, password }));
+    const res = await dispatch(loginUser({ email, password }));
+    if (res) {
+      dispatch(SET_USER(res.payload.user));
+    }
     location.state?.redirectUrl ? navidate(location.state.redirectUrl) : navidate('/profile');
   };
 
