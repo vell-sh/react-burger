@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import cn from 'classnames';
 
 import styles from './styles.module.css';
+import { useAppDispatch } from '../../../hooks/use-app-dispatch';
+import { registerUser } from '../../../services/actions/auth';
 
 type RegisterType = {
   name: string;
@@ -20,9 +22,12 @@ const initialForm = {
 const RegisterPage = () => {
   const [form, setForm] = useState<RegisterType>(initialForm);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const dispatch = useAppDispatch();
 
   const onSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
+    const { name, email, password } = form;
+    dispatch(registerUser({ name, email, password }));
   };
 
   return (

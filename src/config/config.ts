@@ -4,9 +4,10 @@ const config = {
   ingredientsUrl: `${apiUrl}/ingredients`,
   orderUrl: `${apiUrl}/orders/`,
   loginUrl: `${apiUrl}/auth/login/`,
+  getUserUrl: `${apiUrl}/auth/user/`,
   createUserUrl: `${apiUrl}/auth/register/`,
   logoutUrl: `${apiUrl}/auth/logout/`,
-  tokenUrl: `${apiUrl}/auth/token/`,
+  refreshTokenUrl: `${apiUrl}/auth/token/`,
   forgotPasswordUrl: `${apiUrl}/password-reset/`,
   passwordResetUrl: `${apiUrl}/password-reset/reset`,
 };

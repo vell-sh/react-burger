@@ -1,9 +1,11 @@
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useState, SyntheticEvent } from 'react';
 import cn from 'classnames';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import styles from './styles.module.css';
+import { useAppDispatch } from '../../../hooks/use-app-dispatch';
+import { loginUser } from '../../../services/actions/auth';
 
 type LoginType = {
   email: string;
@@ -18,9 +20,15 @@ const initialForm = {
 const LoginPage = () => {
   const [form, setForm] = useState<LoginType>(initialForm);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const dispatch = useAppDispatch();
+  const navidate = useNavigate();
+  const location = useLocation();
 
-  const onSubmit = (e: SyntheticEvent) => {
+  const onSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
+    const { email, password } = form;
+    await dispatch(loginUser({ email, password }));
+    location.state?.redirectUrl ? navidate(location.state.redirectUrl) : navidate('/profile');
   };
 
   return (
@@ -52,7 +60,7 @@ const LoginPage = () => {
         </Button>
       </form>
       <div className="mb-6">
-        <span className="text-secondary">Вы — новый пользователь?</span>{' '}
+        <span className="text-secondary">Вы — новый пользователь?</span>{' '}
         <Link className="link" to="/register">
           Зарегистрироваться
         </Link>

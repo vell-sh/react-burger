@@ -1,41 +1,33 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { getIngredients } from '../../services/actions/burger-ingredients';
 import { AppDispatch } from '../../store';
 import AppHeader from '../app-header/app-header';
 
-import HomePage from '../../pages/home/home';
-import LoginPage from '../../pages/auth/login/login';
-import RegisterPage from '../../pages/auth/register/register';
-import ForgotPasswordPage from '../../pages/auth/forgot-password/forgot-password';
-import ResetPasswordPage from '../../pages/auth/reset-password/reset-password';
-import ProfilePage from '../../pages/profile/profile';
-import IngredientPage from '../../pages/ingredient-info/ingredient-info';
-import { ProtectedRouteElement } from '../protected-route-element/protected-route-element';
-import OrdersPage from '../../pages/orders/orders';
+import { useAppSelector } from '../../hooks/use-app-selector';
+import Auth from '../auth/auth';
+import Authorized from '../authorized/authorized';
+import { getCookie } from '../../utils/utils';
+import { getUser } from '../../services/actions/auth';
 
 const App = () => {
   const dispatch = useDispatch<AppDispatch>();
-
+  const authToken = getCookie('accessToken');
   React.useEffect(() => {
     dispatch(getIngredients());
-  }, [dispatch]);
+    if (authToken) {
+      dispatch(getUser(authToken));
+    }
+  }, [authToken, dispatch]);
+
+  const { user } = useAppSelector(state => state.auth);
 
   return (
     <>
       <BrowserRouter>
         <AppHeader />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-          <Route path="/reset-password" element={<ResetPasswordPage />} />
-          <Route path="/ingredients/:id" element={<IngredientPage />} />
-          <Route path="/profile" element={<ProtectedRouteElement element={<ProfilePage />} />} />
-          <Route path="/orders" element={<ProtectedRouteElement element={<OrdersPage />} />} />
-        </Routes>
+        {!user ? <Auth /> : <Authorized />}
       </BrowserRouter>
     </>
   );
