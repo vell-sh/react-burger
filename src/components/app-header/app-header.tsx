@@ -16,16 +16,16 @@ const AppHeader = () => {
       <nav className="container">
         <ul className={styles.wrapper}>
           <HeaderItem>
-            <MenuItem text="Конструктор" Icon={BurgerIcon} isActive={true} />
+            <MenuItem text="Конструктор" url="/" Icon={BurgerIcon} />
           </HeaderItem>
           <HeaderItem>
-            <MenuItem text="Лента заказов" Icon={ListIcon} isActive={false} />
+            <MenuItem text="Лента заказов" url="/orders" Icon={ListIcon} />
           </HeaderItem>
           <HeaderItem className={styles.logo}>
             <Logo />
           </HeaderItem>
           <HeaderItem className={styles.lastItem}>
-            <MenuItem text="Личный кабинет" Icon={ProfileIcon} isActive={false} />
+            <MenuItem text="Личный кабинет" url="/profile" Icon={ProfileIcon} />
           </HeaderItem>
         </ul>
       </nav>
