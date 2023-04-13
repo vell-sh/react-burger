@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { rootReducer } from './services/reducers';
+import type {} from "redux-thunk/extend-redux"
 
 const store = configureStore({
   reducer: rootReducer,

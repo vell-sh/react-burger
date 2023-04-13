@@ -1,15 +1,17 @@
-import cn from 'classnames';
 import React from 'react';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { getIngredients } from '../../services/actions/burger-ingredients';
 import { AppDispatch } from '../../store';
 import AppHeader from '../app-header/app-header';
-import BurgerConstructor from '../burger-constructor/burger-constructor';
-import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 
-import styles from './style.module.css';
+import HomePage from '../../pages/home/home';
+import LoginPage from '../../pages/auth/login/login';
+import RegisterPage from '../../pages/auth/register/register';
+import ForgotPasswordPage from '../../pages/auth/forgot-password/forgot-password';
+import ResetPasswordPage from '../../pages/auth/reset-password/reset-password';
+import ProfilePage from '../../pages/profile/profile';
+import IngredientPage from '../../pages/ingredient-info/ingredient-info';
 
 const App = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -21,15 +23,17 @@ const App = () => {
   return (
     <>
       <AppHeader />
-      <main className={cn('pt-10 pb-10 container', styles.main)}>
-        <h1 className={styles.title}>Соберите бургер</h1>
-        <DndProvider backend={HTML5Backend}>
-          <div className={styles.content}>
-            <BurgerIngredients className={cn('mr-10', styles.grid)} />
-            <BurgerConstructor className={styles.grid} />
-          </div>
-        </DndProvider>
-      </main>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/ingredients/:id" element={<IngredientPage />} />
+        </Routes>
+      </BrowserRouter>
     </>
   );
 };
