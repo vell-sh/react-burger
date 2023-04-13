@@ -1,11 +1,12 @@
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useState, SyntheticEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import cn from 'classnames';
 
 import styles from './styles.module.css';
 import { useAppDispatch } from '../../../hooks/use-app-dispatch';
 import { registerUser } from '../../../services/actions/auth';
+import { useAppSelector } from '../../../hooks/use-app-selector';
 
 type RegisterType = {
   name: string;
@@ -23,11 +24,16 @@ const RegisterPage = () => {
   const [form, setForm] = useState<RegisterType>(initialForm);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const dispatch = useAppDispatch();
+  const navidate = useNavigate();
+  const { isError } = useAppSelector(state => state.auth);
 
-  const onSubmit = (e: SyntheticEvent) => {
+  const onSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
     const { name, email, password } = form;
-    dispatch(registerUser({ name, email, password }));
+    const res = await dispatch(registerUser({ name, email, password }));
+    if (res && !isError) {
+      navidate('/profile');
+    }
   };
 
   return (

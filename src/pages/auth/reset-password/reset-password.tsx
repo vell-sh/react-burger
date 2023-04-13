@@ -1,26 +1,42 @@
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useState, SyntheticEvent } from 'react';
+import { useState, SyntheticEvent, useEffect } from 'react';
 import cn from 'classnames';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import styles from './styles.module.css';
+import { resetPassword } from '../../../services/actions/auth';
+import { useAppSelector } from '../../../hooks/use-app-selector';
+import { useAppDispatch } from '../../../hooks/use-app-dispatch';
 
 type ResetPasswordType = {
   password: string;
-  code: string;
+  token: string;
 };
 
 const initialForm = {
   password: '',
-  code: '',
+  token: '',
 };
 
 const ResetPasswordPage = () => {
   const [form, setForm] = useState<ResetPasswordType>(initialForm);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const { isForgotPassword, isError } = useAppSelector(state => state.auth);
+  const dispatch = useAppDispatch();
+  const navidate = useNavigate();
 
-  const onSubmit = (e: SyntheticEvent) => {
+  useEffect(() => {
+    if (!isForgotPassword) {
+      navidate('/login');
+    }
+  });
+
+  const onSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
+    await dispatch(resetPassword(form));
+    if (!isError) {
+      navidate('/login');
+    }
   };
 
   return (
@@ -41,9 +57,9 @@ const ResetPasswordPage = () => {
         <Input
           type="text"
           placeholder="Введите код из письма"
-          onChange={e => setForm({ ...form, code: e.target.value })}
-          value={form.code}
-          name="code"
+          onChange={e => setForm({ ...form, token: e.target.value })}
+          value={form.token}
+          name="token"
           size="default"
           extraClass="mb-6"
         />

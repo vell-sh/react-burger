@@ -1,17 +1,26 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { registerUser, loginUser, getUser, logoutUser } from '../actions/auth';
+import {
+  registerUser,
+  loginUser,
+  getUser,
+  logoutUser,
+  forgotPassword,
+  resetPassword,
+} from '../actions/auth';
 import { IUser } from '../../types/userTypes';
 
 export interface IUserState {
+  user: IUser | null;
   isLoading: boolean;
   isError: boolean;
-  user: IUser | null;
+  isForgotPassword: boolean;
 }
 
 const initialState: IUserState = {
-  isLoading: false,
   user: null,
+  isLoading: false,
   isError: false,
+  isForgotPassword: false,
 };
 
 const authSlice = createSlice({
@@ -76,6 +85,36 @@ const authSlice = createSlice({
       state.isLoading = false;
     });
     builder.addCase(logoutUser.rejected, state => {
+      state.isLoading = false;
+      state.isError = true;
+    });
+    /* --- forgot password --- */
+    builder.addCase(forgotPassword.pending, state => {
+      state.isLoading = true;
+      state.isError = false;
+    });
+    builder.addCase(forgotPassword.fulfilled, (state, { payload }) => {
+      if (payload.success) {
+        state.isForgotPassword = true;
+      }
+      state.isLoading = false;
+    });
+    builder.addCase(forgotPassword.rejected, state => {
+      state.isLoading = false;
+      state.isError = true;
+    });
+    /* --- reset password --- */
+    builder.addCase(resetPassword.pending, state => {
+      state.isLoading = true;
+      state.isError = false;
+    });
+    builder.addCase(resetPassword.fulfilled, (state, { payload }) => {
+      if (payload.success) {
+        state.isForgotPassword = false;
+      }
+      state.isLoading = false;
+    });
+    builder.addCase(resetPassword.rejected, state => {
       state.isLoading = false;
       state.isError = true;
     });

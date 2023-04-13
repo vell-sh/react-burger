@@ -12,6 +12,10 @@ interface ILoginUserForm {
   email: string;
   password: string;
 }
+interface IResetPasswordForm {
+  password: string;
+  token: string;
+}
 
 export const getUser = createAsyncThunk('getUser/get', async (token: string) => {
   const result = await fetchWithRefresh(config.getUserUrl, {
@@ -82,36 +86,37 @@ export const logoutUser = createAsyncThunk('logout/post', async (token: string) 
   }
 });
 
-/*
-export const forgotPassword = createAsyncThunk('forgotPassword/post', async (token: string) => {
-  const response = await fetch(config.createUserUrl, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(token),
-  });
-  if (!response.ok) {
-    return response.json().then(err => Promise.reject(err));
+export const forgotPassword = createAsyncThunk('forgotPassword/post', async (email: string) => {
+  try {
+    const res = await fetch(config.forgotPasswordUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email }),
+    });
+    const result = await checkResponse(res);
+    return result;
+  } catch (err: any) {
+    return Promise.reject(err);
   }
-  return (await response.json()) as IRefreshToken;
 });
 
-export const resetPassword = createAsyncThunk('resetPassword/post', async (token: string) => {
-  const response = await fetch(config.createUserUrl, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(token),
-  });
-  if (!response.ok) {
-    return response.json().then(err => Promise.reject(err));
+export const resetPassword = createAsyncThunk(
+  'resetPassword/post',
+  async ({ password, token }: IResetPasswordForm) => {
+    try {
+      const res = await fetch(config.resetPasswordUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ password, token }),
+      });
+      const result = await checkResponse(res);
+      return result;
+    } catch (err: any) {
+      return Promise.reject(err);
+    }
   }
-  return (await response.json()) as IRefreshToken;
-});
-*/
+);

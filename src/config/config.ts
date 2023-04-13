@@ -9,7 +9,7 @@ const config = {
   logoutUrl: `${apiUrl}/auth/logout/`,
   refreshTokenUrl: `${apiUrl}/auth/token/`,
   forgotPasswordUrl: `${apiUrl}/password-reset/`,
-  passwordResetUrl: `${apiUrl}/password-reset/reset`,
+  resetPasswordUrl: `${apiUrl}/password-reset/reset`,
 };
 
 export default config;
