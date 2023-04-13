@@ -1,12 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { USER_ACTIONS_TYPE } from '../actions/user';
+import { updateUser, USER_ACTIONS_TYPE } from '../actions/user';
 import { IUser } from '../../types/userTypes';
 
 export interface UserState {
   user: IUser | null;
+  isError: boolean;
+  isLoading: boolean;
 }
 
-const initialState: UserState = { user: null };
+const initialState: UserState = { user: null, isError: false, isLoading: false };
 
 const userSlice = createSlice({
   initialState,
@@ -15,10 +17,23 @@ const userSlice = createSlice({
     [USER_ACTIONS_TYPE.SET_USER]: (state, action: PayloadAction<IUser>) => {
       state.user = action.payload;
     },
-    [USER_ACTIONS_TYPE.UPDATE_USER]: (state, action: PayloadAction<IUser>) => {
-      state.user = action.payload;
-    },
+  },
+  extraReducers: builder => {
+    builder.addCase(updateUser.pending, state => {
+      state.isLoading = true;
+      state.isError = false;
+    });
+    builder.addCase(updateUser.fulfilled, (state, { payload }) => {
+      if (payload.success) {
+        state.user = payload.user;
+      }
+      state.isLoading = false;
+    });
+    builder.addCase(updateUser.rejected, state => {
+      state.isLoading = false;
+      state.isError = true;
+    });
   },
 });
-export const { SET_USER, UPDATE_USER } = userSlice.actions;
+export const { SET_USER } = userSlice.actions;
 export const userReducer = userSlice.reducer;

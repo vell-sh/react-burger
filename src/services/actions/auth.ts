@@ -23,7 +23,7 @@ export const getUser = createAsyncThunk('getUser/get', async (token: string) => 
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',
-      Authorization: token,
+      Authorization: `Bearer ${token}`,
     },
   });
   return result;
