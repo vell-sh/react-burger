@@ -2,11 +2,10 @@ import cn from 'classnames';
 import { IIngredient } from '../../types/ingredientTypes';
 import InformationElement from './information-element/information-element';
 
+import { useMemo } from 'react';
+import { useParams } from 'react-router-dom';
+import { useAppSelector } from '../../hooks/use-app-selector';
 import styles from './style.module.css';
-
-interface IProps {
-  ingredient: IIngredient;
-}
 
 const getInformationList = (ingredient: IIngredient) => {
   return [
@@ -17,15 +16,27 @@ const getInformationList = (ingredient: IIngredient) => {
   ];
 };
 
-const IngredientDetails = ({ ingredient }: IProps) => {
+const IngredientDetails = () => {
+  const { ingredientId } = useParams();
+  const ingredients = useAppSelector(state => state.ingredients.items);
+
+  const currentIngredient = useMemo(
+    () => ingredients.find(x => x._id === ingredientId),
+    [ingredients, ingredientId]
+  );
+
+  if (!currentIngredient) {
+    return null;
+  }
+
   return (
     <div className={cn(styles.container, 'pb-5')}>
       <div className="mb-4">
-        <img src={ingredient.image_large} alt={ingredient.name} />
+        <img src={currentIngredient.image_large} alt={currentIngredient.name} />
       </div>
-      <span className="text text_type_main-medium mb-8">{ingredient.name}</span>
+      <span className="text text_type_main-medium mb-8">{currentIngredient.name}</span>
       <div className={cn(styles.infoContainer, 'text-secondary')}>
-        {getInformationList(ingredient).map(el => (
+        {getInformationList(currentIngredient).map(el => (
           <InformationElement key={el.name} name={el.name} value={el.value} />
         ))}
       </div>
