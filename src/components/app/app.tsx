@@ -21,6 +21,7 @@ import AppHeader from '../app-header/app-header';
 import IngredientDetails from '../ingredient-detail/ingredient-detail';
 import Modal from '../modal/modal';
 import { ProtectedRouteElement } from '../protected-route-element/protected-route-element';
+import UnauthorizedElement from '../unauthorized-element/unauthorized-element';
 
 const App = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -29,10 +30,7 @@ const App = () => {
     dispatch(getIngredients());
     dispatch(getUser());
   }, []);
-
-  useEffect(() => {
-    
-  }, [dispatch]);
+  
 
   const { user } = useAppSelector(state => state.auth);
 
@@ -51,10 +49,16 @@ const App = () => {
       <AppHeader />
       <Routes location={state?.background || location}>
         <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-        <Route path="/reset-password" element={<ResetPasswordPage />} />
+        <Route path="/login" element={<UnauthorizedElement element={<LoginPage />} />} />
+        <Route path="/register" element={<UnauthorizedElement element={<RegisterPage />} />} />
+        <Route
+          path="/forgot-password"
+          element={<UnauthorizedElement element={<ForgotPasswordPage />} />}
+        />
+        <Route
+          path="/reset-password"
+          element={<UnauthorizedElement element={<ResetPasswordPage />} />}
+        />
         <Route path="/ingredients/:ingredientId" element={<IngredientPage />} />
         <Route path="/profile" element={<ProtectedRouteElement element={<ProfilePage />} />}>
           <Route index element={<UserForm />} />
