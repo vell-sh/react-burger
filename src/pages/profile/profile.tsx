@@ -21,7 +21,7 @@ const ProfilePage = () => {
     navigate('/login', { state: { redirectUrl: '/' } });
   };
 
-  const textClassName = 'text text_type_main-medium pt-3 pb-3  text-non-decoration ';
+  const textClassName = 'text text_type_main-medium pt-3 pb-3 pl-5 pr-5 text-non-decoration ';
 
   return (
     <div className={cn('pt-30 container', styles.main)}>
@@ -40,7 +40,7 @@ const ProfilePage = () => {
         <span onClick={onLogout} className={cn(textClassName, 'text-secondary', styles.linkLogout)}>
           Выход
         </span>
-        <p className={cn(styles.info, 'text text_type_main-default mt-20 text-secondary')}>
+        <p className={cn(styles.info, 'text text_type_main-default mt-20 text-secondary pl-5')}>
           В этом разделе вы можете изменить свои персональные данные
         </p>
       </div>

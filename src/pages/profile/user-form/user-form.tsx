@@ -3,7 +3,6 @@ import { SyntheticEvent, useState } from 'react';
 import { useAppDispatch } from '../../../hooks/use-app-dispatch';
 import { useAppSelector } from '../../../hooks/use-app-selector';
 import { updateUser } from '../../../services/actions/user';
-import { getCookie } from '../../../utils/utils';
 
 interface IForm {
   name: string;
@@ -29,7 +28,9 @@ export const UserForm = () => {
 
   const onIconClick = (field: 'name' | 'email' | 'password') => {
     const isEdit = editingFields[field];
-    setEditingFields({ ...editingFields, [field]: !isEdit });
+    isEdit
+      ? setForm({ ...form, [field]: '' })
+      : setEditingFields({ ...editingFields, [field]: !isEdit });
   };
 
   const onCancel = () => {
@@ -38,10 +39,7 @@ export const UserForm = () => {
 
   const onSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    const token = getCookie('accessToken');
-    if (token) {
-      dispatch(updateUser({ token, ...form }));
-    }
+    dispatch(updateUser(form));
   };
 
   const isButtonsEnable = () => {
@@ -57,7 +55,7 @@ export const UserForm = () => {
         type="text"
         name="name"
         placeholder="Имя"
-        icon="EditIcon"
+        icon={!editingFields.name ? 'EditIcon' : 'CloseIcon'}
         value={form.name}
         onChange={e => setForm({ ...form, name: e.target.value })}
         onIconClick={() => onIconClick('name')}
@@ -70,7 +68,7 @@ export const UserForm = () => {
         type="email"
         name="email"
         placeholder="Логин"
-        icon="EditIcon"
+        icon={!editingFields.email ? 'EditIcon' : 'CloseIcon'}
         value={form.email}
         onChange={e => setForm({ ...form, email: e.target.value })}
         onIconClick={() => onIconClick('email')}
@@ -92,26 +90,21 @@ export const UserForm = () => {
         size="default"
         extraClass="mb-6"
       />
-
-      <div className="d-flex">
-        <Button
-          htmlType="submit"
-          type="primary"
-          disabled={!isButtonsEnable()}
-          size="medium"
-          extraClass="mr-4">
-          Сохранить
-        </Button>
-        <Button
-          htmlType="button"
-          type="secondary"
-          onClick={onCancel}
-          disabled={!isButtonsEnable()}
-          size="medium"
-          extraClass="mr-4">
-          Отменить
-        </Button>
-      </div>
+      {isButtonsEnable() && (
+        <div className="d-flex">
+          <Button htmlType="submit" type="primary" size="medium" extraClass="mr-4">
+            Сохранить
+          </Button>
+          <Button
+            htmlType="button"
+            type="secondary"
+            onClick={onCancel}
+            size="medium"
+            extraClass="mr-4">
+            Отменить
+          </Button>
+        </div>
+      )}
     </form>
   );
 };
