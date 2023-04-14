@@ -54,21 +54,26 @@ export const registerUser = createAsyncThunk('register/post', async (form: ICrea
 });
 
 export const loginUser = createAsyncThunk('login/post', async (form: ILoginUserForm) => {
-  const result = await fetchWithRefresh(config.loginUrl, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-    },
-    body: JSON.stringify({
-      email: form.email,
-      password: form.password,
-    }),
-  });
-  const authToken = result.accessToken.split('Bearer ')[1];
-  setCookie('accessToken', authToken, {});
-  setCookie('refreshToken', result.refreshToken, {});
-  return result;
+  try {
+    const res = await fetch(config.loginUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify({
+        email: form.email,
+        password: form.password,
+      }),
+    });
+    const result = await checkResponse(res);
+    const authToken = result.accessToken.split('Bearer ')[1];
+    setCookie('accessToken', authToken, {});
+    setCookie('refreshToken', result.refreshToken, {});
+    return result;
+  } catch (err: any) {
+    return Promise.reject(err);
+  }
 });
 
 export const logoutUser = createAsyncThunk('logout/post', async (token: string) => {
