@@ -1,7 +1,7 @@
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useState } from 'react';
-import { useAppSelector } from '../../../hooks/use-app-selector';
+import { SyntheticEvent, useState } from 'react';
 import { useAppDispatch } from '../../../hooks/use-app-dispatch';
+import { useAppSelector } from '../../../hooks/use-app-selector';
 import { updateUser } from '../../../services/actions/user';
 import { getCookie } from '../../../utils/utils';
 
@@ -36,9 +36,9 @@ export const UserForm = () => {
     setForm(initialForm);
   };
 
-  const onSubmit = () => {
+  const onSubmit = (e: SyntheticEvent) => {
+    e.preventDefault();
     const token = getCookie('accessToken');
-
     if (token) {
       dispatch(updateUser({ token, ...form }));
     }
@@ -52,7 +52,7 @@ export const UserForm = () => {
   };
 
   return (
-    <form>
+    <form onSubmit={onSubmit}>
       <Input
         type="text"
         name="name"
@@ -97,7 +97,6 @@ export const UserForm = () => {
         <Button
           htmlType="submit"
           type="primary"
-          onClick={onSubmit}
           disabled={!isButtonsEnable()}
           size="medium"
           extraClass="mr-4">

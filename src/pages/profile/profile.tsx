@@ -1,15 +1,18 @@
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../../hooks/use-app-dispatch';
-
 import cn from 'classnames';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import Loader from '../../components/loader/loader';
+import { useAppDispatch } from '../../hooks/use-app-dispatch';
+import { useAppSelector } from '../../hooks/use-app-selector';
 import { logoutUser } from '../../services/actions/auth';
 import { getCookie } from '../../utils/utils';
+
 import styles from './styles.module.css';
 
 const ProfilePage = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const refreshToken = getCookie('refreshToken');
+  const { isLoading } = useAppSelector(state => state.user);
 
   const onLogout = async () => {
     if (refreshToken) {
@@ -44,6 +47,7 @@ const ProfilePage = () => {
       <div className="pl-15">
         <Outlet />
       </div>
+      {isLoading && <Loader />}
     </div>
   );
 };
