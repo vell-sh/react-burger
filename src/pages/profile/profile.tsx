@@ -15,7 +15,7 @@ const ProfilePage = () => {
     if (refreshToken) {
       await dispatch(logoutUser(refreshToken));
     }
-    navigate('/login');
+    navigate('/login', { state: { redirectUrl: '/' } });
   };
 
   const textClassName = 'text text_type_main-medium pt-3 pb-3  text-non-decoration ';

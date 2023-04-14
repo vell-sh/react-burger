@@ -19,7 +19,7 @@ const AppHeader = () => {
             <MenuItem text="Конструктор" url="/" Icon={BurgerIcon} />
           </HeaderItem>
           <HeaderItem>
-            <MenuItem text="Лента заказов" url="/orders" Icon={ListIcon} />
+            <MenuItem text="Лента заказов" url="/profile/orders" Icon={ListIcon} />
           </HeaderItem>
           <HeaderItem className={styles.logo}>
             <Logo />

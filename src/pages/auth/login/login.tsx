@@ -32,7 +32,7 @@ const LoginPage = () => {
     if (res) {
       dispatch(SET_USER(res.payload.user));
     }
-    location.state?.redirectUrl ? navidate(location.state.redirectUrl) : navidate('/profile');
+    location.state?.redirectUrl ? navidate(location.state.redirectUrl) : navidate('/');
   };
 
   return (
