@@ -39,7 +39,7 @@ const RegisterPage = () => {
   return (
     <main className={styles.wrapper}>
       <h1 className={cn('mb-6', styles.header)}>Регистрация</h1>
-      <form className={cn('mb-6', styles.form)}>
+      <form className={cn('mb-6', styles.form)} onSubmit={onSubmit}>
         <Input
           type="text"
           placeholder="Имя"
@@ -72,7 +72,7 @@ const RegisterPage = () => {
           size="default"
           extraClass="mb-6"
         />
-        <Button onClick={onSubmit} htmlType="submit" type="primary" size="medium">
+        <Button htmlType="submit" type="primary" size="medium">
           Зарегистрироваться
         </Button>
       </form>

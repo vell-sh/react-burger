@@ -31,22 +31,26 @@ export const getUser = createAsyncThunk('getUser/get', async () => {
 });
 
 export const registerUser = createAsyncThunk('register/post', async (form: ICreateUserForm) => {
-  const result = await fetchWithRefresh(config.createUserUrl, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-    },
-    body: JSON.stringify({
-      name: form.name,
-      email: form.email,
-      password: form.password,
-    }),
-  });
-  const authToken = result.accessToken.split('Bearer ')[1];
-  setCookie('accessToken', authToken, {});
-  setCookie('refreshToken', result.refreshToken, {});
-  return result;
+  try {
+    const res = await fetch(config.createUserUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify({
+        name: form.name,
+        email: form.email,
+        password: form.password,
+      }),
+    });
+    setCookie('accessToken', null, {});
+    setCookie('refreshToken', null, {});
+    const result = await checkResponse(res);
+    return result;
+  } catch (err: any) {
+    return Promise.reject(err);
+  }
 });
 
 export const loginUser = createAsyncThunk('login/post', async (form: ILoginUserForm) => {

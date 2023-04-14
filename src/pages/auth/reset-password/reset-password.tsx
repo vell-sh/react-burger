@@ -42,7 +42,7 @@ const ResetPasswordPage = () => {
   return (
     <main className={styles.wrapper}>
       <h1 className={cn('mb-6', styles.header)}>Восстановление пароля</h1>
-      <form className={cn('mb-6', styles.form)}>
+      <form className={cn('mb-6', styles.form)} onSubmit={onSubmit}>
         <Input
           type={isPasswordVisible ? 'text' : 'password'}
           placeholder="Введите новый пароль"
@@ -63,7 +63,7 @@ const ResetPasswordPage = () => {
           size="default"
           extraClass="mb-6"
         />
-        <Button onClick={onSubmit} htmlType="submit" type="primary" size="medium">
+        <Button htmlType="submit" type="primary" size="medium">
           Сохранить
         </Button>
       </form>

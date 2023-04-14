@@ -38,7 +38,7 @@ const LoginPage = () => {
   return (
     <main className={styles.wrapper}>
       <h1 className={cn('mb-6', styles.header)}>Вход</h1>
-      <form className={cn('mb-6', styles.form)}>
+      <form className={cn('mb-6', styles.form)} onSubmit={onSubmit}>
         <Input
           type="email"
           placeholder="E-mail"
@@ -59,7 +59,7 @@ const LoginPage = () => {
           size="default"
           extraClass="mb-6"
         />
-        <Button onClick={onSubmit} htmlType="submit" type="primary" size="medium">
+        <Button htmlType="submit" type="primary" size="medium">
           Войти
         </Button>
       </form>
