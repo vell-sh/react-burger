@@ -2,6 +2,9 @@ import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-comp
 import cn from 'classnames';
 import { useMemo } from 'react';
 import { useDrop } from 'react-dnd';
+import { useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../../hooks/use-app-dispatch';
+import { useAppSelector } from '../../hooks/use-app-selector';
 import { createOrder } from '../../services/actions/order';
 import {
   ADD_INGREDIENT,
@@ -10,15 +13,12 @@ import {
 } from '../../services/reducers/burger-constructor';
 import { CLEAR_ORDER } from '../../services/reducers/order';
 import { IIngredient } from '../../types/ingredientTypes';
+import Loader from '../loader/loader';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import { DraggableItem } from './draggable-item';
 import OrderConfirmation from './order-confirmation/order-confirmation';
-
 import styles from './style.module.css';
-import { useAppSelector } from '../../hooks/use-app-selector';
-import { useAppDispatch } from '../../hooks/use-app-dispatch';
-import { useNavigate } from 'react-router-dom';
 
 type IProps = {
   className?: string;
@@ -29,7 +29,7 @@ const BurgerConstructor = ({ className }: IProps) => {
   const navigate = useNavigate();
 
   const { bun, ingredientList } = useAppSelector(state => state.burgerConstructor);
-  const order = useAppSelector(state => state.order.order?.number);
+  const { order, isLoading } = useAppSelector(state => state.order);
   const user = useAppSelector(state => state.auth.user);
   const [, dropTargetRef] = useDrop({
     accept: 'add_ingredient',
@@ -120,7 +120,8 @@ const BurgerConstructor = ({ className }: IProps) => {
             />
           </div>
           <OrderConfirmation onClick={handleConfirmationOrder} price={orderPrice} />
-          {!!order && (
+          {isLoading && <Loader />}
+          {!!order?.number && (
             <Modal onClose={handleCloseModal}>
               <OrderDetails />
             </Modal>
