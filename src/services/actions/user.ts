@@ -1,9 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchWithRefresh } from '../../utils/utils';
+import { fetchWithRefresh, getCookie } from '../../utils/utils';
 import config from '../../config/config';
 
 interface IUpdateUser {
-  token: string;
   name?: string;
   email?: string;
   password?: string;
@@ -14,7 +13,7 @@ export enum USER_ACTIONS_TYPE {
 }
 
 export const updateUser = createAsyncThunk('updateUser/patch', async (updateData: IUpdateUser) => {
-  const { token, ...form } = updateData;
+  const token = getCookie('accessToken');
   const result = await fetchWithRefresh(config.getUserUrl, {
     method: 'PATCH',
     headers: {
@@ -22,7 +21,7 @@ export const updateUser = createAsyncThunk('updateUser/patch', async (updateData
       Accept: 'application/json',
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(form),
+    body: JSON.stringify(updateData),
   });
   return result;
 });

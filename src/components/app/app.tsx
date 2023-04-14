@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
@@ -16,7 +17,6 @@ import { getUser } from '../../services/actions/auth';
 import { getIngredients } from '../../services/actions/burger-ingredients';
 import { SET_USER } from '../../services/reducers/user';
 import { AppDispatch } from '../../store';
-import { getCookie } from '../../utils/utils';
 import AppHeader from '../app-header/app-header';
 import IngredientDetails from '../ingredient-detail/ingredient-detail';
 import Modal from '../modal/modal';
@@ -24,13 +24,15 @@ import { ProtectedRouteElement } from '../protected-route-element/protected-rout
 
 const App = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const authToken = getCookie('accessToken');
+
   useEffect(() => {
     dispatch(getIngredients());
-    if (authToken) {
-      dispatch(getUser(authToken));
-    }
-  }, [authToken, dispatch]);
+    dispatch(getUser());
+  }, []);
+
+  useEffect(() => {
+    
+  }, [dispatch]);
 
   const { user } = useAppSelector(state => state.auth);
 

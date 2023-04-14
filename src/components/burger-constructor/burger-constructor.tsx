@@ -1,6 +1,6 @@
 import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
 import cn from 'classnames';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { useDrop } from 'react-dnd';
 import { createOrder } from '../../services/actions/order';
 import {

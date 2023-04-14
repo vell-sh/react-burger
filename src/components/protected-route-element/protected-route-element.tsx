@@ -3,7 +3,6 @@ import { useAppSelector } from '../../hooks/use-app-selector';
 import { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch } from '../../hooks/use-app-dispatch';
 import { getUser } from '../../services/actions/auth';
-import { getCookie } from '../../utils/utils';
 
 interface IProps {
   element: JSX.Element;
@@ -15,10 +14,7 @@ export const ProtectedRouteElement = ({ element }: IProps) => {
   const dispatch = useAppDispatch();
 
   const init = useCallback(async () => {
-    const authToken = getCookie('accessToken');
-    if (authToken) {
-      await dispatch(getUser(authToken));
-    }
+    await dispatch(getUser());
     setIsUserLoaded(true);
   }, [dispatch]);
 

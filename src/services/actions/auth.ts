@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import config from '../../config/config';
-import { checkResponse, fetchWithRefresh, setCookie } from '../../utils/utils';
+import { checkResponse, fetchWithRefresh, getCookie, setCookie } from '../../utils/utils';
 
 interface ICreateUserForm {
   name: string;
@@ -17,7 +17,8 @@ interface IResetPasswordForm {
   token: string;
 }
 
-export const getUser = createAsyncThunk('getUser/get', async (token: string) => {
+export const getUser = createAsyncThunk('getUser/get', async () => {
+  const token = getCookie('accessToken');
   const result = await fetchWithRefresh(config.getUserUrl, {
     method: 'GET',
     headers: {
