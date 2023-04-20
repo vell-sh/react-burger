@@ -1,10 +1,10 @@
 import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
 import cn from 'classnames';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { useDrop } from 'react-dnd';
-import { useDispatch, useSelector } from 'react-redux';
-import { AnyAction } from 'redux';
-import { ThunkDispatch } from 'redux-thunk';
+import { useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../../hooks/use-app-dispatch';
+import { useAppSelector } from '../../hooks/use-app-selector';
 import { createOrder } from '../../services/actions/order';
 import {
   ADD_INGREDIENT,
@@ -12,13 +12,12 @@ import {
   SORT_INGREDIENTS,
 } from '../../services/reducers/burger-constructor';
 import { CLEAR_ORDER } from '../../services/reducers/order';
-import { RootState } from '../../store';
 import { IIngredient } from '../../types/ingredientTypes';
+import Loader from '../loader/loader';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import { DraggableItem } from './draggable-item';
 import OrderConfirmation from './order-confirmation/order-confirmation';
-
 import styles from './style.module.css';
 
 type IProps = {
@@ -26,10 +25,12 @@ type IProps = {
 };
 
 const BurgerConstructor = ({ className }: IProps) => {
-  const dispatch: ThunkDispatch<RootState, void, AnyAction> = useDispatch();
-  const { bun, ingredientList } = useSelector((store: RootState) => store.burgerConstructor);
-  const order = useSelector((store: RootState) => store.order.order?.number);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
+  const { bun, ingredientList } = useAppSelector(state => state.burgerConstructor);
+  const { order, isLoading } = useAppSelector(state => state.order);
+  const user = useAppSelector(state => state.auth.user);
   const [, dropTargetRef] = useDrop({
     accept: 'add_ingredient',
     drop(item: IIngredient) {
@@ -37,10 +38,16 @@ const BurgerConstructor = ({ className }: IProps) => {
     },
   });
 
-  const handleOpenModal = () => {
+  const handleConfirmationOrder = () => {
     if (!bun) {
       return; // TODO Сделать модалку с ошибкой
     }
+
+    if (!user) {
+      navigate('/login', { state: { redirectUrl: '/' } });
+      return;
+    }
+
     const postData = ingredientList.map(x => x._id);
     postData.unshift(bun._id);
     postData.push(bun._id);
@@ -112,8 +119,9 @@ const BurgerConstructor = ({ className }: IProps) => {
               thumbnail={bun.image}
             />
           </div>
-          <OrderConfirmation onClick={handleOpenModal} price={orderPrice} />
-          {!!order && (
+          <OrderConfirmation onClick={handleConfirmationOrder} price={orderPrice} />
+          {isLoading && <Loader />}
+          {!!order?.number && (
             <Modal onClose={handleCloseModal}>
               <OrderDetails />
             </Modal>

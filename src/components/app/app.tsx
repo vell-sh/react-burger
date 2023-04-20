@@ -1,35 +1,85 @@
-import cn from 'classnames';
-import React from 'react';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { useAppSelector } from '../../hooks/use-app-selector';
+import ForgotPasswordPage from '../../pages/auth/forgot-password/forgot-password';
+import LoginPage from '../../pages/auth/login/login';
+import RegisterPage from '../../pages/auth/register/register';
+import ResetPasswordPage from '../../pages/auth/reset-password/reset-password';
+import HomePage from '../../pages/home/home';
+import IngredientPage from '../../pages/ingredient-info/ingredient-page';
+import NotFoundPage from '../../pages/not-found-page/not-found-page';
+import OrdersPage from '../../pages/orders/orders';
+import ProfilePage from '../../pages/profile/profile';
+import { UserForm } from '../../pages/profile/user-form/user-form';
+import { getUser } from '../../services/actions/auth';
 import { getIngredients } from '../../services/actions/burger-ingredients';
+import { SET_USER } from '../../services/reducers/user';
 import { AppDispatch } from '../../store';
 import AppHeader from '../app-header/app-header';
-import BurgerConstructor from '../burger-constructor/burger-constructor';
-import BurgerIngredients from '../burger-ingredients/burger-ingredients';
-
-import styles from './style.module.css';
+import IngredientDetails from '../ingredient-detail/ingredient-detail';
+import Modal from '../modal/modal';
+import { ProtectedRouteElement } from '../protected-route-element/protected-route-element';
+import UnauthorizedElement from '../unauthorized-element/unauthorized-element';
 
 const App = () => {
   const dispatch = useDispatch<AppDispatch>();
 
-  React.useEffect(() => {
+  useEffect(() => {
     dispatch(getIngredients());
-  }, [dispatch]);
+    dispatch(getUser());
+  }, []);
+  
+
+  const { user } = useAppSelector(state => state.auth);
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  const state = location.state;
+
+  useEffect(() => {
+    if (user) {
+      dispatch(SET_USER(user));
+    }
+  }, [dispatch, user]);
 
   return (
     <>
       <AppHeader />
-      <main className={cn('pt-10 pb-10 container', styles.main)}>
-        <h1 className={styles.title}>Соберите бургер</h1>
-        <DndProvider backend={HTML5Backend}>
-          <div className={styles.content}>
-            <BurgerIngredients className={cn('mr-10', styles.grid)} />
-            <BurgerConstructor className={styles.grid} />
-          </div>
-        </DndProvider>
-      </main>
+      <Routes location={state?.background || location}>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<UnauthorizedElement element={<LoginPage />} />} />
+        <Route path="/register" element={<UnauthorizedElement element={<RegisterPage />} />} />
+        <Route
+          path="/forgot-password"
+          element={<UnauthorizedElement element={<ForgotPasswordPage />} />}
+        />
+        <Route
+          path="/reset-password"
+          element={<UnauthorizedElement element={<ResetPasswordPage />} />}
+        />
+        <Route path="/ingredients/:ingredientId" element={<IngredientPage />} />
+        <Route path="/profile" element={<ProtectedRouteElement element={<ProfilePage />} />}>
+          <Route index element={<UserForm />} />
+          <Route path="/profile/orders" element={<ProtectedRouteElement element={<div></div>} />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Route>
+        <Route path="/orders" element={<ProtectedRouteElement element={<OrdersPage />} />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+      {state?.background && (
+        <Routes>
+          <Route
+            path="ingredients/:ingredientId"
+            element={
+              <Modal title="Детали ингредиента" onClose={() => navigate(state.background)}>
+                <IngredientDetails />
+              </Modal>
+            }
+          />
+        </Routes>
+      )}
     </>
   );
 };

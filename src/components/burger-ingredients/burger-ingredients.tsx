@@ -4,18 +4,14 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useIsInViewport } from '../../hooks/use-in-view-port';
 import { formatIngredientType } from '../../services/format.service';
-import {
-  ADD_CURRENT_INGREDIENT,
-  REMOVE_CURRENT_INGREDIENT,
-} from '../../services/reducers/current-ingredient';
+import { ADD_CURRENT_INGREDIENT } from '../../services/reducers/current-ingredient';
 import { RootState } from '../../store';
 import { IIngredient, IngredientType } from '../../types/ingredientTypes';
-import IngredientDetails from '../ingredient-detail/ingredient-detail';
-import Modal from '../modal/modal';
 import BurgerIngredient from './burger-ingredient/burger-ingredient';
 import BurgerIngredientsWrapper from './burger-ingredients-wrapper/burger-ingredients-wrapper';
 
 import styles from './style.module.css';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface IProps {
   className?: string;
@@ -24,9 +20,10 @@ interface IProps {
 const BurgerIngredients = ({ className }: IProps) => {
   const [currentTab, setCurrentTab] = useState<IngredientType>(IngredientType.bun);
   const dispatch = useDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const ingredients = useSelector((store: RootState) => store.ingredients.items);
-  const currentIngredient = useSelector((store: RootState) => store.currentIngredient.item);
 
   const bunItems = useMemo(
     () => ingredients.filter(x => x.type === IngredientType.bun),
@@ -41,12 +38,12 @@ const BurgerIngredients = ({ className }: IProps) => {
     [ingredients]
   );
 
-  const handleOpenModal = (ingredient: IIngredient) => {
-    dispatch(ADD_CURRENT_INGREDIENT(ingredient));
-  };
+  const showDetails = (ingredient: IIngredient) => {
+    navigate(`/ingredients/${ingredient._id}`, {
+      state: { background: location },
+    });
 
-  const handleCloseModal = () => {
-    dispatch(REMOVE_CURRENT_INGREDIENT());
+    dispatch(ADD_CURRENT_INGREDIENT(ingredient));
   };
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -116,30 +113,25 @@ const BurgerIngredients = ({ className }: IProps) => {
             title={formatIngredientType(IngredientType.bun)}
             innerRef={bunRef}>
             {bunItems.map(x => (
-              <BurgerIngredient key={x._id} item={x} onClick={handleOpenModal} />
+              <BurgerIngredient key={x._id} item={x} onClick={showDetails} />
             ))}
           </BurgerIngredientsWrapper>
           <BurgerIngredientsWrapper
             title={formatIngredientType(IngredientType.sauce)}
             innerRef={sauceRef}>
             {sauceItems.map(x => (
-              <BurgerIngredient key={x._id} item={x} onClick={handleOpenModal} />
+              <BurgerIngredient key={x._id} item={x} onClick={showDetails} />
             ))}
           </BurgerIngredientsWrapper>
           <BurgerIngredientsWrapper
             title={formatIngredientType(IngredientType.main)}
             innerRef={mainRef}>
             {mainItems.map(x => (
-              <BurgerIngredient key={x._id} item={x} onClick={handleOpenModal} />
+              <BurgerIngredient key={x._id} item={x} onClick={showDetails} />
             ))}
           </BurgerIngredientsWrapper>
         </div>
       </div>
-      {currentIngredient && (
-        <Modal title="Детали ингредиента" onClose={handleCloseModal}>
-          <IngredientDetails ingredient={currentIngredient!} />
-        </Modal>
-      )}
     </section>
   );
 };
