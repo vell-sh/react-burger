@@ -48,7 +48,7 @@ export const registerUser = createAsyncThunk('register/post', async (form: ICrea
     setCookie('refreshToken', null, {});
     const result = await checkResponse(res);
     return result;
-  } catch (err: any) {
+  } catch (err) {
     return Promise.reject(err);
   }
 });
@@ -71,7 +71,7 @@ export const loginUser = createAsyncThunk('login/post', async (form: ILoginUserF
     setCookie('accessToken', authToken, {});
     setCookie('refreshToken', result.refreshToken, {});
     return result;
-  } catch (err: any) {
+  } catch (err) {
     return Promise.reject(err);
   }
 });
@@ -91,7 +91,7 @@ export const logoutUser = createAsyncThunk('logout/post', async (token: string) 
     setCookie('refreshToken', null, {});
     const result = await checkResponse(res);
     return result;
-  } catch (err: any) {
+  } catch (err) {
     return Promise.reject(err);
   }
 });
@@ -107,7 +107,7 @@ export const forgotPassword = createAsyncThunk('forgotPassword/post', async (ema
     });
     const result = await checkResponse(res);
     return result;
-  } catch (err: any) {
+  } catch (err) {
     return Promise.reject(err);
   }
 });
@@ -125,7 +125,7 @@ export const resetPassword = createAsyncThunk(
       });
       const result = await checkResponse(res);
       return result;
-    } catch (err: any) {
+    } catch (err) {
       return Promise.reject(err);
     }
   }

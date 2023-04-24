@@ -1,5 +1,13 @@
 /* eslint-disable no-useless-escape */
 import config from '../config/config';
+import { TApiError } from '../types/generalTypes';
+
+export function isApiError(x: unknown): x is TApiError {
+  if (x && typeof x === 'object' && 'message' in x) {
+    return true;
+  }
+  return false;
+}
 
 // ---------- fetch with refresh ---------- //
 
@@ -24,8 +32,8 @@ export const fetchWithRefresh = async (url: string, options: RequestInit) => {
   try {
     const res = await fetch(url, options);
     return await checkResponse(res);
-  } catch (err: any) {
-    if (err.message === 'jwt expired') {
+  } catch (err) {
+    if (isApiError(err) && err.message === 'jwt expired') {
       const refreshData = await refreshToken(); //обновляем токен
       if (!refreshData.success) {
         return Promise.reject(refreshData);

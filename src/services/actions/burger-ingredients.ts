@@ -12,7 +12,7 @@ export const getIngredients = createAsyncThunk<ApiAnswer>('ingridients/get', asy
     });
     const result = await checkResponse(res);
     return result;
-  } catch (err: any) {
+  } catch (err) {
     return Promise.reject(err);
   }
 });
