@@ -6,17 +6,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import styles from './styles.module.css';
 import { forgotPassword } from '../../../services/actions/auth';
 import { useAppDispatch } from '../../../hooks/use-app-dispatch';
-
-type ResetPasswordType = {
-  email: string;
-};
+import { IForgotPassword } from '../../../types/authTypes';
 
 const initialForm = {
   email: '',
 };
 
 const ForgotPasswordPage = () => {
-  const [form, setForm] = useState<ResetPasswordType>(initialForm);
+  const [form, setForm] = useState<IForgotPassword>(initialForm);
   const dispatch = useAppDispatch();
   const navidate = useNavigate();
 

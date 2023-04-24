@@ -7,11 +7,7 @@ import styles from './styles.module.css';
 import { useAppDispatch } from '../../../hooks/use-app-dispatch';
 import { loginUser } from '../../../services/actions/auth';
 import { SET_USER } from '../../../services/reducers/user';
-
-type LoginType = {
-  email: string;
-  password: string;
-};
+import { ILoginUser } from '../../../types/authTypes';
 
 const initialForm = {
   email: '',
@@ -19,7 +15,7 @@ const initialForm = {
 };
 
 const LoginPage = () => {
-  const [form, setForm] = useState<LoginType>(initialForm);
+  const [form, setForm] = useState<ILoginUser>(initialForm);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const dispatch = useAppDispatch();
   const navidate = useNavigate();

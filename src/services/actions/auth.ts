@@ -1,21 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import config from '../../config/config';
 import { checkResponse, fetchWithRefresh, getCookie, setCookie } from '../../utils/utils';
-
-interface ICreateUserForm {
-  name: string;
-  email: string;
-  password: string;
-}
-
-interface ILoginUserForm {
-  email: string;
-  password: string;
-}
-interface IResetPasswordForm {
-  password: string;
-  token: string;
-}
+import { ICreateUser, ILoginUser, IResetPassword } from '../../types/authTypes';
 
 export const getUser = createAsyncThunk('getUser/get', async () => {
   const token = getCookie('accessToken');
@@ -30,7 +16,7 @@ export const getUser = createAsyncThunk('getUser/get', async () => {
   return result;
 });
 
-export const registerUser = createAsyncThunk('register/post', async (form: ICreateUserForm) => {
+export const registerUser = createAsyncThunk('register/post', async (data: ICreateUser) => {
   try {
     const res = await fetch(config.createUserUrl, {
       method: 'POST',
@@ -39,9 +25,9 @@ export const registerUser = createAsyncThunk('register/post', async (form: ICrea
         Accept: 'application/json',
       },
       body: JSON.stringify({
-        name: form.name,
-        email: form.email,
-        password: form.password,
+        name: data.name,
+        email: data.email,
+        password: data.password,
       }),
     });
     setCookie('accessToken', null, {});
@@ -53,7 +39,7 @@ export const registerUser = createAsyncThunk('register/post', async (form: ICrea
   }
 });
 
-export const loginUser = createAsyncThunk('login/post', async (form: ILoginUserForm) => {
+export const loginUser = createAsyncThunk('login/post', async (form: ILoginUser) => {
   try {
     const res = await fetch(config.loginUrl, {
       method: 'POST',
@@ -114,7 +100,7 @@ export const forgotPassword = createAsyncThunk('forgotPassword/post', async (ema
 
 export const resetPassword = createAsyncThunk(
   'resetPassword/post',
-  async ({ password, token }: IResetPasswordForm) => {
+  async ({ password, token }: IResetPassword) => {
     try {
       const res = await fetch(config.resetPasswordUrl, {
         method: 'POST',

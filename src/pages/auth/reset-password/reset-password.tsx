@@ -7,11 +7,7 @@ import styles from './styles.module.css';
 import { resetPassword } from '../../../services/actions/auth';
 import { useAppSelector } from '../../../hooks/use-app-selector';
 import { useAppDispatch } from '../../../hooks/use-app-dispatch';
-
-type ResetPasswordType = {
-  password: string;
-  token: string;
-};
+import { IResetPassword } from '../../../types/authTypes';
 
 const initialForm = {
   password: '',
@@ -19,7 +15,7 @@ const initialForm = {
 };
 
 const ResetPasswordPage = () => {
-  const [form, setForm] = useState<ResetPasswordType>(initialForm);
+  const [form, setForm] = useState<IResetPassword>(initialForm);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const { isForgotPassword, isError } = useAppSelector(state => state.auth);
   const dispatch = useAppDispatch();
