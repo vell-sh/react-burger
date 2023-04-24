@@ -1,17 +1,16 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import cn from 'classnames';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useIsInViewport } from '../../hooks/use-in-view-port';
 import { formatIngredientType } from '../../services/format.service';
-import { ADD_CURRENT_INGREDIENT } from '../../services/reducers/current-ingredient';
 import { RootState } from '../../store';
 import { IIngredient, IngredientType } from '../../types/ingredientTypes';
 import BurgerIngredient from './burger-ingredient/burger-ingredient';
 import BurgerIngredientsWrapper from './burger-ingredients-wrapper/burger-ingredients-wrapper';
 
 import styles from './style.module.css';
-import { useLocation, useNavigate } from 'react-router-dom';
 
 interface IProps {
   className?: string;
@@ -19,7 +18,6 @@ interface IProps {
 
 const BurgerIngredients = ({ className }: IProps) => {
   const [currentTab, setCurrentTab] = useState<IngredientType>(IngredientType.bun);
-  const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -42,8 +40,6 @@ const BurgerIngredients = ({ className }: IProps) => {
     navigate(`/ingredients/${ingredient._id}`, {
       state: { background: location },
     });
-
-    dispatch(ADD_CURRENT_INGREDIENT(ingredient));
   };
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
