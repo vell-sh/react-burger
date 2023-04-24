@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Navigate } from 'react-router-dom';
 import { useAppSelector } from '../../hooks/use-app-selector';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useAppDispatch } from '../../hooks/use-app-dispatch';
 import { getUser } from '../../services/actions/auth';
 
@@ -9,22 +10,18 @@ interface IProps {
 }
 
 export const ProtectedRouteElement = ({ element }: IProps) => {
-  const { user } = useAppSelector(state => state.auth);
-  const [isUserLoaded, setIsUserLoaded] = useState(false);
+  const { user, isLoading } = useAppSelector(state => state.auth);
   const dispatch = useAppDispatch();
 
   const init = useCallback(async () => {
     await dispatch(getUser());
-    setIsUserLoaded(true);
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
-    init();
+    if (!isLoading) {
+      init();
+    }
   }, [init]);
-
-  if (!isUserLoaded) {
-    return null;
-  }
 
   if (!user?.email) {
     return <Navigate to="/login" replace />;
