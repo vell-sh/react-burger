@@ -17,102 +17,82 @@ export const getUser = createAsyncThunk('getUser/get', async () => {
 });
 
 export const registerUser = createAsyncThunk('register/post', async (data: ICreateUser) => {
-  try {
-    const res = await fetch(config.createUserUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-      body: JSON.stringify({
-        name: data.name,
-        email: data.email,
-        password: data.password,
-      }),
-    });
-    setCookie('accessToken', null, {});
-    setCookie('refreshToken', null, {});
-    const result = await checkResponse(res);
-    return result;
-  } catch (err) {
-    return Promise.reject(err);
-  }
+  const res = await fetch(config.createUserUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    body: JSON.stringify({
+      name: data.name,
+      email: data.email,
+      password: data.password,
+    }),
+  });
+  setCookie('accessToken', null, {});
+  setCookie('refreshToken', null, {});
+  const result = await checkResponse(res);
+  return result;
 });
 
 export const loginUser = createAsyncThunk('login/post', async (form: ILoginUser) => {
-  try {
-    const res = await fetch(config.loginUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-      body: JSON.stringify({
-        email: form.email,
-        password: form.password,
-      }),
-    });
-    const result = await checkResponse(res);
-    const authToken = result.accessToken.split('Bearer ')[1];
-    setCookie('accessToken', authToken, {});
-    setCookie('refreshToken', result.refreshToken, {});
-    return result;
-  } catch (err) {
-    return Promise.reject(err);
-  }
+  const res = await fetch(config.loginUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    body: JSON.stringify({
+      email: form.email,
+      password: form.password,
+    }),
+  });
+  const result = await checkResponse(res);
+  const authToken = result.accessToken.split('Bearer ')[1];
+  setCookie('accessToken', authToken, {});
+  setCookie('refreshToken', result.refreshToken, {});
+  return result;
 });
 
 export const logoutUser = createAsyncThunk('logout/post', async (token: string) => {
-  try {
-    const res = await fetch(config.logoutUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        token: token,
-      }),
-    });
-    setCookie('accessToken', null, {});
-    setCookie('refreshToken', null, {});
-    const result = await checkResponse(res);
-    return result;
-  } catch (err) {
-    return Promise.reject(err);
-  }
+  const res = await fetch(config.logoutUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      token: token,
+    }),
+  });
+  setCookie('accessToken', null, {});
+  setCookie('refreshToken', null, {});
+  const result = await checkResponse(res);
+  return result;
 });
 
 export const forgotPassword = createAsyncThunk('forgotPassword/post', async (email: string) => {
-  try {
-    const res = await fetch(config.forgotPasswordUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email }),
-    });
-    const result = await checkResponse(res);
-    return result;
-  } catch (err) {
-    return Promise.reject(err);
-  }
+  const res = await fetch(config.forgotPasswordUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ email }),
+  });
+  const result = await checkResponse(res);
+  return result;
 });
 
 export const resetPassword = createAsyncThunk(
   'resetPassword/post',
   async ({ password, token }: IResetPassword) => {
-    try {
-      const res = await fetch(config.resetPasswordUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ password, token }),
-      });
-      const result = await checkResponse(res);
-      return result;
-    } catch (err) {
-      return Promise.reject(err);
-    }
+    const res = await fetch(config.resetPasswordUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ password, token }),
+    });
+    const result = await checkResponse(res);
+    return result;
   }
 );
