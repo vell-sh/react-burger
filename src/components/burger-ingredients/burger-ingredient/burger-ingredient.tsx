@@ -2,8 +2,7 @@ import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-c
 import cn from 'classnames';
 import { useMemo } from 'react';
 import { useDrag } from 'react-dnd';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../store';
+import { useAppSelector } from '../../../hooks/use-app-selector';
 import { IIngredient } from '../../../types/ingredientTypes';
 
 import styles from './style.module.css';
@@ -25,10 +24,8 @@ const BurgerIngredient = ({ item, onClick }: IProps) => {
   });
   const opacity = isDrag ? 0.4 : 1;
 
-  const burgerIngredients = useSelector(
-    (store: RootState) => store.burgerConstructor.ingredientList
-  );
-  const bun = useSelector((store: RootState) => store.burgerConstructor.bun);
+  const burgerIngredients = useAppSelector(store => store.burgerConstructor.ingredientList);
+  const bun = useAppSelector(store => store.burgerConstructor.bun);
 
   const countIngredients = useMemo(() => {
     if (bun && item._id === bun._id) {

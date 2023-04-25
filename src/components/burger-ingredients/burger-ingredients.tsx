@@ -1,11 +1,10 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import cn from 'classnames';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useAppSelector } from '../../hooks/use-app-selector';
 import { useIsInViewport } from '../../hooks/use-in-view-port';
 import { formatIngredientType } from '../../services/format.service';
-import { RootState } from '../../store';
 import { IIngredient, IngredientType } from '../../types/ingredientTypes';
 import BurgerIngredient from './burger-ingredient/burger-ingredient';
 import BurgerIngredientsWrapper from './burger-ingredients-wrapper/burger-ingredients-wrapper';
@@ -21,7 +20,7 @@ const BurgerIngredients = ({ className }: IProps) => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const ingredients = useSelector((store: RootState) => store.ingredients.items);
+  const ingredients = useAppSelector(store => store.ingredients.items);
 
   const bunItems = useMemo(
     () => ingredients.filter(x => x.type === IngredientType.bun),
