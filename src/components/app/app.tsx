@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../../hooks/use-app-dispatch';
 import { useAppSelector } from '../../hooks/use-app-selector';
 import ForgotPasswordPage from '../../pages/auth/forgot-password/forgot-password';
 import LoginPage from '../../pages/auth/login/login';
@@ -16,7 +16,6 @@ import { UserForm } from '../../pages/profile/user-form/user-form';
 import { getUser } from '../../services/actions/auth';
 import { getIngredients } from '../../services/actions/burger-ingredients';
 import { SET_USER } from '../../services/reducers/user';
-import { AppDispatch } from '../../store';
 import AppHeader from '../app-header/app-header';
 import IngredientDetails from '../ingredient-detail/ingredient-detail';
 import Modal from '../modal/modal';
@@ -24,13 +23,12 @@ import { ProtectedRouteElement } from '../protected-route-element/protected-rout
 import UnauthorizedElement from '../unauthorized-element/unauthorized-element';
 
 const App = () => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(getIngredients());
     dispatch(getUser());
   }, []);
-  
 
   const { user } = useAppSelector(state => state.auth);
 

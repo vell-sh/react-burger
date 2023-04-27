@@ -2,8 +2,9 @@ import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burg
 import type { Identifier, XYCoord } from 'dnd-core';
 import { useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../../hooks/use-app-dispatch';
 import { REMOVE_INGREDIENT } from '../../services/reducers/burger-constructor';
+
 import styles from './style.module.css';
 
 interface IProps {
@@ -30,7 +31,7 @@ export const DraggableItem = ({
   thumbnail,
   ...props
 }: IProps) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   // --- DnD --- //
   const ref = useRef<HTMLDivElement>(null);
