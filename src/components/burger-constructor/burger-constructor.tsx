@@ -44,7 +44,7 @@ const BurgerConstructor = ({ className }: IProps) => {
     }
 
     if (!user) {
-      navigate('/login', { state: { redirectUrl: '/' } });
+      navigate('/login', { state: { from: '/' } });
       return;
     }
 

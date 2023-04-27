@@ -29,8 +29,8 @@ const LoginPage = () => {
     if (res) {
       dispatch(SET_USER(res.payload.user));
     }
-    const redirectUrl = location.state?.redirectUrl;
-    redirectUrl ? navigate(redirectUrl) : navigate('/');
+    const from = location.state?.from;
+    from ? navigate(from) : navigate('/');
   };
 
   return (

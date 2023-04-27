@@ -20,7 +20,7 @@ const ProfilePage = () => {
       await dispatch(logoutUser(refreshToken));
       dispatch(SET_USER(null));
     }
-    navigate('/login', { state: { redirectUrl: '/' } });
+    navigate('/login', { state: { from: '/' } });
   };
 
   const textClassName = 'text text_type_main-medium pt-3 pb-3 pl-5 pr-5 text-non-decoration ';
