@@ -6,7 +6,7 @@ interface IProps {
 }
 
 const UnauthorizedElement = ({ element }: IProps) => {
-  const { user } = useAppSelector(state => state.user);
+  const { user } = useAppSelector(state => state.auth);
 
   if (user?.email) {
     return <Navigate to="/" replace />;

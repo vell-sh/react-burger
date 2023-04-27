@@ -10,7 +10,7 @@ interface IProps {
 }
 
 export const ProtectedRouteElement = ({ element }: IProps) => {
-  const { user, isLoading } = useAppSelector(state => state.auth);
+  const { user, isLoading, isError } = useAppSelector(state => state.auth);
   const dispatch = useAppDispatch();
 
   const init = useCallback(async () => {
@@ -23,7 +23,7 @@ export const ProtectedRouteElement = ({ element }: IProps) => {
     }
   }, [init]);
 
-  if (!user?.email) {
+  if (!user?.email || isError) {
     return <Navigate to="/login" replace />;
   }
 
