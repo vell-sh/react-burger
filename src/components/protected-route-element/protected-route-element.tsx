@@ -7,28 +7,6 @@ interface IProps {
   anonymous?: boolean;
 }
 
-// export const ProtectedRouteElement = ({ element }: IProps) => {
-//   const { user, isLoading, isError } = useAppSelector(state => state.auth);
-//   const dispatch = useAppDispatch();
-//   const location = useLocation();
-
-//   const init = useCallback(async () => {
-//     await dispatch(getUser());
-//   }, []);
-
-//   useEffect(() => {
-//     if (!isLoading) {
-//       init();
-//     }
-//   }, [init]);
-
-//   if (!user?.email || isError) {
-//     return <Navigate to="/login" replace state={{ redirectUrl: location.pathname }} />;
-//   }
-
-//   return element;
-// };
-
 export function ProtectedRoute({ element, anonymous }: IProps) {
   const isLoggedIn = useAppSelector(store => store.auth.user?.email);
   const location = useLocation();
