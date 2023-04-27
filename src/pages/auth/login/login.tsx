@@ -1,13 +1,14 @@
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useState, SyntheticEvent } from 'react';
 import cn from 'classnames';
+import { SyntheticEvent, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-
-import styles from './styles.module.css';
 import { useAppDispatch } from '../../../hooks/use-app-dispatch';
+import { useForm } from '../../../hooks/use-form';
 import { loginUser } from '../../../services/actions/auth';
 import { SET_USER } from '../../../services/reducers/user';
 import { ILoginUser } from '../../../types/authTypes';
+
+import styles from './styles.module.css';
 
 const initialForm = {
   email: '',
@@ -15,7 +16,7 @@ const initialForm = {
 };
 
 const LoginPage = () => {
-  const [form, setForm] = useState<ILoginUser>(initialForm);
+  const { values, handleChange } = useForm<ILoginUser>(initialForm);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ const LoginPage = () => {
 
   const onSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
-    const { email, password } = form;
+    const { email, password } = values;
     const res = await dispatch(loginUser({ email, password }));
     if (res) {
       dispatch(SET_USER(res.payload.user));
@@ -39,8 +40,8 @@ const LoginPage = () => {
         <Input
           type="email"
           placeholder="E-mail"
-          onChange={e => setForm({ ...form, email: e.target.value })}
-          value={form.email}
+          onChange={e => handleChange(e)}
+          value={values.email}
           name="email"
           size="default"
           extraClass="mb-6"
@@ -48,9 +49,9 @@ const LoginPage = () => {
         <Input
           type={isPasswordVisible ? 'text' : 'password'}
           placeholder={'Пароль'}
-          onChange={e => setForm({ ...form, password: e.target.value })}
+          onChange={e => handleChange(e)}
           icon={isPasswordVisible ? 'ShowIcon' : 'HideIcon'}
-          value={form.password}
+          value={values.password}
           name="password"
           onIconClick={() => setIsPasswordVisible(!isPasswordVisible)}
           size="default"

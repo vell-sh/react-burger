@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import config from '../../config/config';
-import { ICreateUser, ILoginUser, IResetPassword } from '../../types/authTypes';
+import { IRegisterUser, ILoginUser, IResetPassword } from '../../types/authTypes';
 import { fetchWithRefresh, getCookie, request, setCookie } from '../../utils/utils';
 
 export const getUser = createAsyncThunk('getUser/get', async () => {
@@ -16,7 +16,7 @@ export const getUser = createAsyncThunk('getUser/get', async () => {
   return result;
 });
 
-export const registerUser = createAsyncThunk('register/post', async (data: ICreateUser) => {
+export const registerUser = createAsyncThunk('register/post', async (data: IRegisterUser) => {
   const res = await request(config.createUserUrl, {
     method: 'POST',
     headers: {

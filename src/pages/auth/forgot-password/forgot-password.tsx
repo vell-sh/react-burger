@@ -1,25 +1,26 @@
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useState, SyntheticEvent } from 'react';
 import cn from 'classnames';
+import { SyntheticEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../../../hooks/use-app-dispatch';
+import { useForm } from '../../../hooks/use-form';
+import { forgotPassword } from '../../../services/actions/auth';
+import { IForgotPassword } from '../../../types/authTypes';
 
 import styles from './styles.module.css';
-import { forgotPassword } from '../../../services/actions/auth';
-import { useAppDispatch } from '../../../hooks/use-app-dispatch';
-import { IForgotPassword } from '../../../types/authTypes';
 
 const initialForm = {
   email: '',
 };
 
 const ForgotPasswordPage = () => {
-  const [form, setForm] = useState<IForgotPassword>(initialForm);
+  const { values, handleChange } = useForm<IForgotPassword>(initialForm);
   const dispatch = useAppDispatch();
   const navidate = useNavigate();
 
   const onSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
-    const { email } = form;
+    const { email } = values;
     const res = await dispatch(forgotPassword(email));
     if (res) {
       navidate('/reset-password');
@@ -33,9 +34,9 @@ const ForgotPasswordPage = () => {
         <Input
           type="email"
           name="email"
-          value={form.email}
+          value={values.email}
           placeholder="Укажите e-mail"
-          onChange={e => setForm({ ...form, email: e.target.value })}
+          onChange={e => handleChange(e)}
           errorText={'Ошибка'}
           size="default"
           extraClass="mb-6"
