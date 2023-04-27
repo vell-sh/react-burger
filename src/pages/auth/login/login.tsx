@@ -18,7 +18,7 @@ const LoginPage = () => {
   const [form, setForm] = useState<ILoginUser>(initialForm);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const dispatch = useAppDispatch();
-  const navidate = useNavigate();
+  const navigate = useNavigate();
   const location = useLocation();
 
   const onSubmit = async (e: SyntheticEvent) => {
@@ -28,7 +28,8 @@ const LoginPage = () => {
     if (res) {
       dispatch(SET_USER(res.payload.user));
     }
-    location.state?.redirectUrl ? navidate(location.state.redirectUrl) : navidate('/');
+    const redirectUrl = location.state?.redirectUrl;
+    redirectUrl ? navigate(redirectUrl) : navigate('/');
   };
 
   return (
