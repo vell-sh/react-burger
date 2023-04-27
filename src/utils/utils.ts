@@ -15,8 +15,12 @@ export const checkResponse = (res: Response) => {
   return res.ok ? res.json() : res.json().then(err => Promise.reject(err));
 };
 
+export async function request(url: string, options: RequestInit) {
+  return fetch(url, options).then(checkResponse);
+}
+
 export const refreshToken = async () => {
-  const res = await fetch(config.refreshTokenUrl, {
+  const res = await request(config.refreshTokenUrl, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
@@ -25,13 +29,13 @@ export const refreshToken = async () => {
       token: getCookie('refreshToken'),
     }),
   });
-  return checkResponse(res);
+  return res;
 };
 
 export const fetchWithRefresh = async (url: string, options: RequestInit) => {
   try {
-    const res = await fetch(url, options);
-    return await checkResponse(res);
+    const res = await request(url, options);
+    return await res;
   } catch (err) {
     if (isApiError(err) && err.message === 'jwt expired') {
       const refreshData = await refreshToken(); //обновляем токен
@@ -42,8 +46,8 @@ export const fetchWithRefresh = async (url: string, options: RequestInit) => {
       setCookie('accessToken', refreshData.accessToken, {});
       const headersInit = refreshData.accessToken;
       options.headers = headersInit;
-      const res = await fetch(url, options); //повторяем запрос
-      return await checkResponse(res);
+      const res = await request(url, options); //повторяем запрос
+      return await res;
     } else {
       return Promise.reject(err);
     }
