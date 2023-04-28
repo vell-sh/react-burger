@@ -1,17 +1,14 @@
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useState, SyntheticEvent, useEffect } from 'react';
 import cn from 'classnames';
+import { SyntheticEvent, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../../../hooks/use-app-dispatch';
+import { useAppSelector } from '../../../hooks/use-app-selector';
+import { useForm } from '../../../hooks/use-form';
+import { resetPassword } from '../../../services/actions/auth';
+import { IResetPassword } from '../../../types/authTypes';
 
 import styles from './styles.module.css';
-import { resetPassword } from '../../../services/actions/auth';
-import { useAppSelector } from '../../../hooks/use-app-selector';
-import { useAppDispatch } from '../../../hooks/use-app-dispatch';
-
-type ResetPasswordType = {
-  password: string;
-  token: string;
-};
 
 const initialForm = {
   password: '',
@@ -19,7 +16,7 @@ const initialForm = {
 };
 
 const ResetPasswordPage = () => {
-  const [form, setForm] = useState<ResetPasswordType>(initialForm);
+  const { values, handleChange } = useForm<IResetPassword>(initialForm);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const { isForgotPassword, isError } = useAppSelector(state => state.auth);
   const dispatch = useAppDispatch();
@@ -33,7 +30,7 @@ const ResetPasswordPage = () => {
 
   const onSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
-    await dispatch(resetPassword(form));
+    await dispatch(resetPassword(values));
     if (!isError) {
       navidate('/login');
     }
@@ -46,9 +43,9 @@ const ResetPasswordPage = () => {
         <Input
           type={isPasswordVisible ? 'text' : 'password'}
           placeholder="Введите новый пароль"
-          onChange={e => setForm({ ...form, password: e.target.value })}
+          onChange={e => handleChange(e)}
           icon={isPasswordVisible ? 'ShowIcon' : 'HideIcon'}
-          value={form.password}
+          value={values.password}
           name="password"
           onIconClick={() => setIsPasswordVisible(!isPasswordVisible)}
           size="default"
@@ -57,8 +54,8 @@ const ResetPasswordPage = () => {
         <Input
           type="text"
           placeholder="Введите код из письма"
-          onChange={e => setForm({ ...form, token: e.target.value })}
-          value={form.token}
+          onChange={e => handleChange(e)}
+          value={values.token}
           name="token"
           size="default"
           extraClass="mb-6"

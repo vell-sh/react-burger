@@ -1,12 +1,11 @@
 import cn from 'classnames';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../hooks/use-app-selector';
 import done from '../../images/graphics.svg';
-import { RootState } from '../../store';
 
 import styles from './style.module.css';
 
 const OrderDetails = () => {
-  const number = useSelector((store: RootState) => store.order.order?.number);
+  const number = useAppSelector((store) => store.order.order?.number);
 
   return (
     <div className={cn(styles.container, 'pb-20')}>

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../../hooks/use-app-dispatch';
 import { useAppSelector } from '../../hooks/use-app-selector';
 import ForgotPasswordPage from '../../pages/auth/forgot-password/forgot-password';
 import LoginPage from '../../pages/auth/login/login';
@@ -16,21 +16,18 @@ import { UserForm } from '../../pages/profile/user-form/user-form';
 import { getUser } from '../../services/actions/auth';
 import { getIngredients } from '../../services/actions/burger-ingredients';
 import { SET_USER } from '../../services/reducers/user';
-import { AppDispatch } from '../../store';
 import AppHeader from '../app-header/app-header';
 import IngredientDetails from '../ingredient-detail/ingredient-detail';
 import Modal from '../modal/modal';
-import { ProtectedRouteElement } from '../protected-route-element/protected-route-element';
-import UnauthorizedElement from '../unauthorized-element/unauthorized-element';
+import { ProtectedRoute } from '../protected-route-element/protected-route-element';
 
 const App = () => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(getIngredients());
     dispatch(getUser());
   }, []);
-  
 
   const { user } = useAppSelector(state => state.auth);
 
@@ -49,23 +46,23 @@ const App = () => {
       <AppHeader />
       <Routes location={state?.background || location}>
         <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<UnauthorizedElement element={<LoginPage />} />} />
-        <Route path="/register" element={<UnauthorizedElement element={<RegisterPage />} />} />
+        <Route path="/login" element={<ProtectedRoute anonymous element={<LoginPage />} />} />
+        <Route path="/register" element={<ProtectedRoute anonymous element={<RegisterPage />} />} />
         <Route
           path="/forgot-password"
-          element={<UnauthorizedElement element={<ForgotPasswordPage />} />}
+          element={<ProtectedRoute anonymous element={<ForgotPasswordPage />} />}
         />
         <Route
           path="/reset-password"
-          element={<UnauthorizedElement element={<ResetPasswordPage />} />}
+          element={<ProtectedRoute anonymous element={<ResetPasswordPage />} />}
         />
         <Route path="/ingredients/:ingredientId" element={<IngredientPage />} />
-        <Route path="/profile" element={<ProtectedRouteElement element={<ProfilePage />} />}>
+        <Route path="/profile" element={<ProtectedRoute element={<ProfilePage />} />}>
           <Route index element={<UserForm />} />
-          <Route path="/profile/orders" element={<ProtectedRouteElement element={<div></div>} />} />
+          <Route path="/profile/orders" element={<ProtectedRoute element={<div></div>} />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
-        <Route path="/orders" element={<ProtectedRouteElement element={<OrdersPage />} />} />
+        <Route path="/orders" element={<ProtectedRoute element={<OrdersPage />} />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       {state?.background && (

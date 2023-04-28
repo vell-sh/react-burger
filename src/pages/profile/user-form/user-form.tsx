@@ -2,51 +2,52 @@ import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-component
 import { SyntheticEvent, useState } from 'react';
 import { useAppDispatch } from '../../../hooks/use-app-dispatch';
 import { useAppSelector } from '../../../hooks/use-app-selector';
+import { useForm } from '../../../hooks/use-form';
 import { updateUser } from '../../../services/actions/user';
+import { IRegisterUser } from '../../../types/authTypes';
 
-interface IForm {
-  name: string;
-  email: string;
-  password: string;
-}
 export const UserForm = () => {
   const { user } = useAppSelector(state => state.user);
   const dispatch = useAppDispatch();
-  const initialForm: IForm = {
+
+  const initialForm: IRegisterUser = {
     name: user?.name || '',
     email: user?.email || '',
     password: '',
   };
 
-  const [editingFields, setEditingFields] = useState({
+  const initialEditingFields = {
     name: false,
     email: false,
     password: false,
-  });
+  };
 
-  const [form, setForm] = useState(initialForm);
+  const { values, handleChange, setValues } = useForm<IRegisterUser>(initialForm);
+
+  const [editingFields, setEditingFields] = useState(initialEditingFields);
 
   const onIconClick = (field: 'name' | 'email' | 'password') => {
     const isEdit = editingFields[field];
     isEdit
-      ? setForm({ ...form, [field]: '' })
+      ? setValues({ ...values, [field]: '' })
       : setEditingFields({ ...editingFields, [field]: !isEdit });
   };
 
   const onCancel = () => {
-    setForm(initialForm);
+    setValues(initialForm);
   };
 
   const onSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    dispatch(updateUser(form));
+    dispatch(updateUser(values));
+    setEditingFields(initialEditingFields);
   };
 
   const isButtonsEnable = () => {
     if (!user) {
       return false;
     }
-    return user.email !== form.email || user.name !== form.name || !!form.password;
+    return user.email !== values.email || user.name !== values.name || !!values.password;
   };
 
   return (
@@ -56,8 +57,8 @@ export const UserForm = () => {
         name="name"
         placeholder="Имя"
         icon={!editingFields.name ? 'EditIcon' : 'CloseIcon'}
-        value={form.name}
-        onChange={e => setForm({ ...form, name: e.target.value })}
+        value={values.name}
+        onChange={e => handleChange(e)}
         onIconClick={() => onIconClick('name')}
         disabled={!editingFields.name}
         error={false}
@@ -69,8 +70,8 @@ export const UserForm = () => {
         name="email"
         placeholder="Логин"
         icon={!editingFields.email ? 'EditIcon' : 'CloseIcon'}
-        value={form.email}
-        onChange={e => setForm({ ...form, email: e.target.value })}
+        value={values.email}
+        onChange={e => handleChange(e)}
         onIconClick={() => onIconClick('email')}
         disabled={!editingFields.email}
         error={false}
@@ -80,10 +81,10 @@ export const UserForm = () => {
       <Input
         type="password"
         name="password"
-        value={form.password}
+        value={values.password}
         icon="EditIcon"
         placeholder="Введите новый пароль"
-        onChange={e => setForm({ ...form, password: e.target.value })}
+        onChange={e => handleChange(e)}
         onIconClick={() => onIconClick('password')}
         disabled={!editingFields.password}
         error={false}

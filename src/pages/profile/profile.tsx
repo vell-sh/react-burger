@@ -4,6 +4,7 @@ import Loader from '../../components/loader/loader';
 import { useAppDispatch } from '../../hooks/use-app-dispatch';
 import { useAppSelector } from '../../hooks/use-app-selector';
 import { logoutUser } from '../../services/actions/auth';
+import { SET_USER } from '../../services/reducers/user';
 import { getCookie } from '../../utils/utils';
 
 import styles from './styles.module.css';
@@ -17,8 +18,9 @@ const ProfilePage = () => {
   const onLogout = async () => {
     if (refreshToken) {
       await dispatch(logoutUser(refreshToken));
+      dispatch(SET_USER(null));
     }
-    navigate('/login', { state: { redirectUrl: '/' } });
+    navigate('/login', { state: { from: '/' } });
   };
 
   const textClassName = 'text text_type_main-medium pt-3 pb-3 pl-5 pr-5 text-non-decoration ';
